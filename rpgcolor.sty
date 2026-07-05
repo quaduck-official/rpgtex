@@ -1,0 +1,333 @@
+\ProvidesExplPackage
+    {rpgcolor}
+    {2026-07-04}
+    {0.1}
+    {Colors and themes for RPG typesetting.}
+
+\RequirePackage{xcolor}
+\RequirePackage{l3keys2e}
+
+
+\bool_new:N \g__rpg_color_loaded_bool
+\bool_gset_true:N \g__rpg_color_loaded_bool
+
+
+% ============================================================================
+% Base palette
+% ============================================================================
+
+\definecolor   {RPGColorMidnight} {HTML} {123A5A}
+\definecolor        {RPGColorInk} {HTML} {2B2522}
+\definecolor {RPGColorNightshade} {HTML} {352947}
+\definecolor   {RPGColorCharcoal} {HTML} {3A3A36}
+\definecolor   {RPGColorDeepTeal} {HTML} {24666A}
+\definecolor     {RPGColorForest} {HTML} {46603A}
+\definecolor  {RPGColorAubergine} {HTML} {4B2E5A}
+\definecolor      {RPGColorStorm} {HTML} {4F6473}
+\definecolor        {RPGColorHex} {HTML} {5A3F6B}
+\definecolor    {RPGColorOxblood} {HTML} {58180D}
+\definecolor      {RPGColorUmber} {HTML} {6B4423}
+\definecolor      {RPGColorSteel} {HTML} {6F8FA6}
+\definecolor      {RPGColorBlood} {HTML} {7A1E16}
+\definecolor   {RPGColorAmethyst} {HTML} {8A6AA7}
+\definecolor    {RPGColorCrimson} {HTML} {9C2B1B}
+\definecolor       {RPGColorRust} {HTML} {9A4A2F}
+\definecolor  {RPGColorVerdigris} {HTML} {6E9F94}
+\definecolor     {RPGColorLichen} {HTML} {A7B27A}
+\definecolor    {RPGColorCeladon} {HTML} {B5CEB8}
+\definecolor     {RPGColorBronze} {HTML} {B89A67}
+\definecolor     {RPGColorCopper} {HTML} {B87333}
+\definecolor   {RPGColorMushroom} {HTML} {B9A89A}
+\definecolor       {RPGColorMoss} {HTML} {B9C997}
+\definecolor    {RPGColorSeafoam} {HTML} {BFDAD6}
+\definecolor      {RPGColorBrass} {HTML} {C9AD6A}
+\definecolor       {RPGColorGold} {HTML} {D6B85A}
+\definecolor        {RPGColorAsh} {HTML} {CACCBE}
+\definecolor      {RPGColorLilac} {HTML} {D7D4D6}
+\definecolor  {RPGColorMoonstone} {HTML} {D8E6E7}
+\definecolor      {RPGColorSlate} {HTML} {DBE4E4}
+\definecolor      {RPGColorMauve} {HTML} {DCCCC5}
+\definecolor       {RPGColorBone} {HTML} {E8DFC8}
+\definecolor       {RPGColorMist} {HTML} {DCEAF0}
+\definecolor      {RPGColorOlive} {HTML} {E0E5C1}
+\definecolor   {RPGColorLavender} {HTML} {E3CED3}
+\definecolor  {RPGColorParchment} {HTML} {E5D5AC}
+\definecolor      {RPGColorAmber} {HTML} {E69A28}
+\definecolor       {RPGColorSage} {HTML} {E8E6DC}
+\definecolor   {RPGColorWisteria} {HTML} {F1EDF5}
+\definecolor      {RPGColorCoral} {HTML} {F3D7C1}
+\definecolor      {RPGColorCream} {HTML} {F7F2E5}
+\definecolor     {RPGColorVellum} {HTML} {F9EFD6}
+\definecolor      {RPGColorIvory} {HTML} {FDF1DC}
+\definecolor      {RPGColorFrost} {HTML} {F0F6F8}
+
+
+% ============================================================================
+% Named-theme system
+% ============================================================================
+
+% ----------------------------------------------------------------------------
+% Declarations
+
+\prop_new:N \g__rpg_color_themes_prop
+\tl_new:N \l__rpg_color_spec_tl
+
+\keys_define:nn { rpg / color / theme }
+{
+    base      .code:n = { \colorlet      {RPGColorBase} {#1} },
+    comment   .code:n = { \colorlet   {RPGColorComment} {#1} },
+    sidebar   .code:n = { \colorlet   {RPGColorSidebar} {#1} },
+    tablerow  .code:n = { \colorlet  {RPGColorTableRow} {#1} },
+    narration .code:n = { \colorlet {RPGColorNarration} {#1} },
+    title     .code:n = { \colorlet     {RPGColorTitle} {#1} },
+    hrule     .code:n = { \colorlet     {RPGColorHRule} {#1} },
+    statblock .code:n = { \colorlet {RPGColorStatBlock} {#1} },
+    ribbon    .code:n = { \colorlet    {RPGColorRibbon} {#1} },
+    contour   .code:n = { \colorlet   {RPGColorContour} {#1} },
+    footer    .code:n = { \colorlet    {RPGColorFooter} {#1} }
+}
+
+% ----------------------------------------------------------------------------
+% Theme-setting control sequence helpers
+
+% Theme-applying wrapper
+\cs_new_protected:Npn \__rpg_color_theme_apply_spec:n #1
+{
+    \keys_set:nn { rpg / color / theme } { #1 }
+}
+\cs_generate_variant:Nn \__rpg_color_theme_apply_spec:n { V }
+
+% Theme setter
+\cs_new_protected:Npn \__rpg_color_theme_apply:n #1
+{
+    \prop_get:NnNTF \g__rpg_color_themes_prop { #1 } \l__rpg_color_spec_tl
+    {
+        \__rpg_color_theme_apply_spec:V \l__rpg_color_spec_tl
+    }
+    { \PackageError {rpgcolor} {Unknown~theme~'#1'} }
+}
+\cs_generate_variant:Nn \__rpg_color_theme_apply:n { V }
+
+% ----------------------------------------------------------------------------
+% User-facing API
+
+% \RPGColorSet{key=value,...}
+\NewDocumentCommand \RPGColorSet { m }
+{
+    \__rpg_color_theme_apply_spec:n { #1 }
+}
+
+% \RPGColorThemeCreate{name}{key=value,...}
+\NewDocumentCommand \RPGColorThemeCreate { m m }
+{
+    \prop_gput:Nnn \g__rpg_color_themes_prop {#1} {#2}
+}
+
+% \RPGColorThemeApply{name}
+\NewDocumentCommand \RPGColorThemeApply { m }
+{
+    \__rpg_color_theme_apply:n { #1 }
+}
+
+
+% ============================================================================
+% Built-in themes
+% ============================================================================
+
+\RPGColorThemeCreate {default}
+{
+    base      = RPGColorSage,
+    comment   = RPGColorSage,
+    sidebar   = RPGColorSage,
+    tablerow  = RPGColorSage,
+    narration = RPGColorParchment,
+    title     = RPGColorCrimson,
+    hrule     = RPGColorBronze,
+    statblock = RPGColorIvory,
+    ribbon    = RPGColorAmber,
+    contour   = RPGColorAsh,
+    footer    = RPGColorBronze,
+}
+
+\RPGColorThemeCreate {PHB2014}
+{
+    base      = RPGColorVellum,
+    comment   = RPGColorVellum,
+    sidebar   = RPGColorVellum,
+    tablerow  = RPGColorVellum,
+    narration = RPGColorParchment,
+    title     = RPGColorCrimson,
+    hrule     = RPGColorBronze,
+    statblock = RPGColorIvory,
+    ribbon    = RPGColorAmber,
+    contour   = RPGColorAsh,
+    footer    = RPGColorBronze,
+}
+
+\RPGColorThemeCreate {DMG2014}
+{
+    base      = RPGColorSlate,
+    comment   = RPGColorSlate,
+    sidebar   = RPGColorSlate,
+    tablerow  = RPGColorSlate,
+    narration = RPGColorLilac,
+    title     = RPGColorOxblood,
+    hrule     = RPGColorBrass,
+    statblock = RPGColorCream,
+    ribbon    = RPGColorBronze,
+    contour   = RPGColorAsh,
+    footer    = RPGColorOxblood,
+}
+
+\RPGColorThemeCreate {MM2014}
+{
+    base      = RPGColorCoral,
+    comment   = RPGColorCoral,
+    sidebar   = RPGColorCoral,
+    tablerow  = RPGColorCoral,
+    narration = RPGColorMauve,
+    title     = RPGColorOxblood,
+    hrule     = RPGColorBronze,
+    statblock = RPGColorIvory,
+    ribbon    = RPGColorAmber,
+    contour   = RPGColorAsh,
+    footer    = RPGColorOxblood,
+}
+
+\RPGColorThemeCreate {arcane}
+{
+    base      = RPGColorWisteria,
+    comment   = RPGColorLavender,
+    sidebar   = RPGColorLavender,
+    tablerow  = RPGColorWisteria,
+    narration = RPGColorLilac,
+    title     = RPGColorAubergine,
+    hrule     = RPGColorAmethyst,
+    statblock = RPGColorCream,
+    ribbon    = RPGColorBrass,
+    contour   = RPGColorAsh,
+    footer    = RPGColorAubergine,
+}
+
+\RPGColorThemeCreate {feywild}
+{
+    base      = RPGColorOlive,
+    comment   = RPGColorOlive,
+    sidebar   = RPGColorOlive,
+    tablerow  = RPGColorOlive,
+    narration = RPGColorLavender,
+    title     = RPGColorForest,
+    hrule     = RPGColorMoss,
+    statblock = RPGColorCream,
+    ribbon    = RPGColorBrass,
+    contour   = RPGColorAsh,
+    footer    = RPGColorForest,
+}
+
+\RPGColorThemeCreate {maritime}
+{
+    base      = RPGColorMist,
+    comment   = RPGColorMist,
+    sidebar   = RPGColorMist,
+    tablerow  = RPGColorMist,
+    narration = RPGColorSeafoam,
+    title     = RPGColorMidnight,
+    hrule     = RPGColorSteel,
+    statblock = RPGColorFrost,
+    ribbon    = RPGColorDeepTeal,
+    contour   = RPGColorAsh,
+    footer    = RPGColorMidnight,
+}
+
+\RPGColorThemeCreate {gothic}
+{
+    base      = RPGColorBone,
+    comment   = RPGColorBone,
+    sidebar   = RPGColorMushroom,
+    tablerow  = RPGColorBone,
+    narration = RPGColorLilac,
+    title     = RPGColorNightshade,
+    hrule     = RPGColorStorm,
+    statblock = RPGColorCream,
+    ribbon    = RPGColorBlood,
+    contour   = RPGColorAsh,
+    footer    = RPGColorNightshade,
+}
+
+\RPGColorThemeCreate {infernal}
+{
+    base      = RPGColorMauve,
+    comment   = RPGColorMauve,
+    sidebar   = RPGColorCoral,
+    tablerow  = RPGColorMauve,
+    narration = RPGColorParchment,
+    title     = RPGColorBlood,
+    hrule     = RPGColorCopper,
+    statblock = RPGColorIvory,
+    ribbon    = RPGColorRust,
+    contour   = RPGColorAsh,
+    footer    = RPGColorBlood,
+}
+
+\RPGColorThemeCreate {underdark}
+{
+    base      = RPGColorMoonstone,
+    comment   = RPGColorMoonstone,
+    sidebar   = RPGColorSlate,
+    tablerow  = RPGColorMoonstone,
+    narration = RPGColorLilac,
+    title     = RPGColorInk,
+    hrule     = RPGColorHex,
+    statblock = RPGColorFrost,
+    ribbon    = RPGColorNightshade,
+    contour   = RPGColorAsh,
+    footer    = RPGColorInk,
+}
+
+\RPGColorThemeCreate {druidic}
+{
+    base      = RPGColorOlive,
+    comment   = RPGColorOlive,
+    sidebar   = RPGColorLichen,
+    tablerow  = RPGColorOlive,
+    narration = RPGColorCeladon,
+    title     = RPGColorForest,
+    hrule     = RPGColorVerdigris,
+    statblock = RPGColorCream,
+    ribbon    = RPGColorUmber,
+    contour   = RPGColorAsh,
+    footer    = RPGColorForest,
+}
+
+\RPGColorThemeCreate {desert}
+{
+    base      = RPGColorVellum,
+    comment   = RPGColorVellum,
+    sidebar   = RPGColorParchment,
+    tablerow  = RPGColorVellum,
+    narration = RPGColorBone,
+    title     = RPGColorUmber,
+    hrule     = RPGColorCopper,
+    statblock = RPGColorIvory,
+    ribbon    = RPGColorGold,
+    contour   = RPGColorAsh,
+    footer    = RPGColorUmber,
+}
+
+% ============================================================================
+% Package-option handling
+% ============================================================================
+
+% Fallback to default theme
+\__rpg_color_theme_apply:n {default}
+
+% Theme name matching as [name] or [theme=name] option
+\keys_define:nn { rpg / colors }
+{
+    theme .code:n =
+    { \__rpg_color_theme_apply:n {#1} },
+
+    unknown .code:n =
+    { \__rpg_color_theme_apply:V \l_keys_key_tl },
+}
+\ProcessKeysOptions { rpg / colors }
