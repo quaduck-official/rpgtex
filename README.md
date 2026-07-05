@@ -55,9 +55,9 @@ Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrim
 | footer    | `RPGColorFooter` |
 
 **Predefined Themes**
- - *default*: Sage neutrals with parchment accents and crimson titles.
- - *PHB2014*:
- - *DMG2014*:
+ - *default*: Bone and parchment with umber titles, forest rules, and rust accents.
+ - *PHB2014*: Light green PHB trim with tan backgrounds, red titles, and gold accents.
+ - *DMG2014*: Lavender DMG trim with tan backgrounds, red titles, and gold accents.
  - *arcane*: Lavender and wisteria with aubergine titles and amethyst rules.
  - *feywild*: Olive and lavender with forest titles and moss accents.
  - *maritime*: Mist and seafoam with midnight titles and deep teal ribbons.
