@@ -1,0 +1,106 @@
+\documentclass{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RPGCOLOR PACKAGE 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Load the package. Without an option, the package selects the default theme.
+\usepackage{rpgcolor}
+
+% You can also choose a built-in theme as a package option, for example:
+% \usepackage[theme=PHB2014]{rpgcolor}
+% \usepackage[PHB2014]{rpgcolor}
+
+% Create a document-local theme with the same semantic color slots used by the
+% built-in themes.
+
+\definecolor{MyCoolColor}{HTML}{DADB0D} % RPGColor already loads xcolor
+\RPGColorThemeCreate{custom}
+{%
+    base      = MyCoolColor, % You can use custom colors
+    comment   = RPGColorLavender,
+    sidebar   = RPGColorCeladon,
+    tablerow  = RPGColorOlive,
+    narration = RPGColorCoral,
+    title     = RPGColorAubergine,
+    hrule     = RPGColorDeepTeal,
+    statblock = RPGColorFrost,
+    ribbon    = RPGColorAmber,
+    contour   = RPGColorAsh,
+    footer    = RPGColorOxblood,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   DEMO HELPERS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Take a generic xcolor and make a row with | \ColorName | <Color Box> |
+\newcommand{\ColorRow}[1]
+{%
+    \rule[-0.35em]{0pt}{1.5em}\texttt{\char`\\#1}
+    & \colorbox{#1}{\rule[-0.35em]{0pt}{1.5em}\hspace{18em}}\\
+}
+
+% Use \ColorRow to demo a whole RPGColor theme in a table
+\newcommand{\ThemeTable}[1]
+{%
+    \RPGColorThemeApply{#1}%
+    \subsection*{\texttt{#1}}
+
+    \begin{tabular}{|l|l|}
+        \hline
+        Color control sequence & Color \\
+        \hline
+        \ColorRow{RPGColorBase}
+        \ColorRow{RPGColorComment}
+        \ColorRow{RPGColorSidebar}
+        \ColorRow{RPGColorTableRow}
+        \ColorRow{RPGColorNarration}
+        \ColorRow{RPGColorTitle}
+        \ColorRow{RPGColorHRule}
+        \ColorRow{RPGColorStatBlock}
+        \ColorRow{RPGColorRibbon}
+        \ColorRow{RPGColorContour}
+        \ColorRow{RPGColorFooter}
+        \hline
+    \end{tabular}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\section*{RPG Color Themes}
+
+Each table switches theme with the \texttt{\char`\\RPGColorThemeApply} command and then displays the semantic color control sequences defined by that theme. See the README for a full list of themes.
+
+\ThemeTable{default}
+\ThemeTable{PHB2014}
+\ThemeTable{DMG2014}
+\ThemeTable{MM2014}
+\ThemeTable{arcane}
+\ThemeTable{feywild}
+\ThemeTable{infernal}
+\ThemeTable{custom}
+
+\subsection*{Local Overrides}
+
+Use \texttt{\char`\\RPGColorSet} with \texttt{key=value,...} when you want to change one or more live semantic colors without changing the saved theme definition.
+
+\RPGColorThemeApply{default}%
+\RPGColorSet{title=RPGColorForest,footer=RPGColorInk,ribbon=MyCoolColor}%
+
+This table starts from \texttt{default}, then changes only \texttt{title}, \texttt{footer}, and \texttt{ribbon} with \texttt{\char`\\RPGColorSet}.
+The saved theme is unchanged; applying it again restores the original values.
+
+\begin{tabular}{|l|l|}
+    \hline
+    Color control sequence & Color \\
+    \hline
+    \ColorRow{RPGColorTitle}
+    \ColorRow{RPGColorFooter}
+    \ColorRow{RPGColorRibbon}
+    \hline
+\end{tabular}
+
+\end{document}
