@@ -1,0 +1,256 @@
+%=======================================================================================
+%   RPGLAYOUT
+%=======================================================================================
+
+\ProvidesExplPackage
+    {rpglayout}
+    {2026-07-09}
+    {0.1}
+    {Page layout controls for RPG typesetting.}
+
+\RequirePackage{l3keys2e}
+
+%=======================================================================================
+%   SETUP
+
+%---------------------------------------------------------------------------------------
+%   OPTIONS
+
+\tl_new:N \l__rpg_layout_justification_tl
+\tl_set:Nn \l__rpg_layout_justification_tl { \RaggedRight }
+\bool_new:N \l__rpg_layout_twocolumn_bool
+
+
+\keys_define:nn { rpg / layout / options }
+{
+    justification .choice:,
+    justification / raggedright .code:n =
+        { \tl_set:Nn \l__rpg_layout_justification_tl { \RaggedRight } },
+    justification / ragged .code:n =
+        { \tl_set:Nn \l__rpg_layout_justification_tl { \RaggedRight } },
+    justification / justified .code:n =
+        { \tl_clear:N \l__rpg_layout_justification_tl },
+
+    alignment .choice:,
+    alignment / raggedright .code:n =
+        { \tl_set:Nn \l__rpg_layout_justification_tl { \RaggedRight } },
+    alignment / ragged .code:n =
+        { \tl_set:Nn \l__rpg_layout_justification_tl { \RaggedRight } },
+    alignment / justified .code:n =
+        { \tl_clear:N \l__rpg_layout_justification_tl },
+
+    columns .choice:,
+    columns / one .code:n =
+        { \bool_set_false:N \l__rpg_layout_twocolumn_bool },
+    columns / two .code:n =
+        { \bool_set_true:N \l__rpg_layout_twocolumn_bool },
+
+    column .choice:,
+    column / one .code:n =
+        { \bool_set_false:N \l__rpg_layout_twocolumn_bool },
+    column / two .code:n =
+        { \bool_set_true:N \l__rpg_layout_twocolumn_bool },
+
+    raggedright .code:n =
+        { \tl_set:Nn \l__rpg_layout_justification_tl { \RaggedRight } },
+    ragged .code:n =
+        { \tl_set:Nn \l__rpg_layout_justification_tl { \RaggedRight } },
+    justified .code:n =
+        { \tl_clear:N \l__rpg_layout_justification_tl },
+    onecolumn .code:n =
+        { \bool_set_false:N \l__rpg_layout_twocolumn_bool },
+    twocolumn .code:n =
+        { \bool_set_true:N \l__rpg_layout_twocolumn_bool },
+}
+\ProcessKeysOptions { rpg / layout / options }
+
+\AtBeginDocument
+{
+    \bool_if:NT \l__rpg_layout_twocolumn_bool { \twocolumn }
+}
+
+
+
+%---------------------------------------------------------------------------------------
+%   INCLUDE
+
+\RequirePackage{titlesec}
+\RequirePackage{geometry}
+\RequirePackage{enumitem}
+\RequirePackage{xcolor}
+\RequirePackage{rpgcolor}
+\RequirePackage{rpgfont}
+
+
+
+
+%=======================================================================================
+%   LAYOUT
+
+%---------------------------------------------------------------------------------------
+%   LENGTHS
+    
+\geometry
+{%
+    hmargin   = .75in, % Left and right margins
+    top       = .46in, % Top of text area to top of page
+    bottom    = .8in,  % Bottom of text area to bottom of page
+    footskip  = .32in, % Bottom of text area to bottom of footer text
+    columnsep = .33in, % Space between columns
+}
+
+
+% Set spacing around floats
+\setlength{\textfloatsep}{11pt plus 4pt minus 4pt}
+\setlength{\intextsep}{11pt plus 4pt minus 4pt}
+\setlength{\dbltextfloatsep}{11pt plus 4pt minus 4pt}
+
+
+% Set paragraph and line spacing
+\setlength{\parindent}{1em}
+\setlength{\RaggedRightRightskip}{0pt plus 1em}
+\setlength{\RaggedRightParindent}{\parindent}
+
+
+%---------------------------------------------------------------------------------------
+%   TOLERANCES
+    
+% Restrict hyphenation
+\tolerance        = 1
+\emergencystretch = \maxdimen
+\hyphenpenalty    = 10000
+\hbadness         = 10000
+
+
+
+%---------------------------------------------------------------------------------------
+%   ENVIRONMENTS
+    
+% Customize itemize environment.
+\setlist{leftmargin=1em}
+\setitemize{noitemsep,topsep=0.5ex,label=\footnotesize{\textbullet}}
+
+
+
+%---------------------------------------------------------------------------------------
+%   LABELS
+    
+% Change part numbering to Arabic numbers from Roman numerals
+\renewcommand{\thepart}{\arabic{part}}
+
+% Remove Numbering (If you want Numbering set secnumdepth to the appropriate depth)
+\setcounter{secnumdepth}{0}
+
+
+
+%---------------------------------------------------------------------------------------
+%   SECTIONING
+
+
+%------     PART    ------ %
+
+\titleformat{\part}
+    [display]
+    { \centering \RPGFontPart } % format
+    { \RPGContour{\partname\ \thepart} } % label
+    { 2ex } % sep
+    { \RPGContour } % before-code
+
+
+%------     CHAPTER    ------ %
+
+\titleformat{\chapter}
+    { \RPGFontChapter } % format
+    { \RPGContour{\chaptertitlename\ \thechapter :} } % label
+    { \wordsep } % sep
+    { \RPGContour } % before-code
+
+\titlespacing*{\chapter}
+    { 0pt }  % left
+    { .3ex }  % before-sep
+    { 2.8ex } % after-sep
+
+
+%------     SECTION    ------ %
+
+\titleformat{\section}
+    { \RPGFontSection \RPGLayoutJustification } % format
+    { \thesection } % label
+    { 1em } % sep
+    { \nopagebreak } % before-code
+
+\titlespacing*{\section}
+    { 0pt } % left
+    { 1.3ex plus .43ex minus .43ex } % before-sep
+    { 0pt } % after-sep
+
+
+%------     SUBSECTION    ------ %
+
+\titleformat{\subsection}
+    { \RPGFontSubsection \RPGLayoutJustification } % format
+    { \thesubsection } % label
+    { 1em } % sep
+    { \nopagebreak } % before-code
+    [ \vspace{-.3ex} \titleline{ \color{RPGColorTitle} \titlerule[1pt] } ] % after-code
+
+\titlespacing*{\subsection}
+    { 0pt } % left
+    { 1.4ex plus .47ex minus .47ex } % before-sep
+    { 1.2ex } % after-sep
+
+
+%------     SUBSUBSECTION    ------ %
+
+\titleformat{\subsubsection}
+    { \RPGFontSubsubsection \RPGLayoutJustification } % format
+    { \thesubsubsection } % label
+    { 1em } % sep
+    { \nopagebreak } % before-code
+
+\titlespacing*{\subsubsection}
+    { 0pt } % left
+    { 2ex plus .67ex minus .67ex } % before-sep
+    { .2ex } % after-sep
+
+
+%------     PARAGRAPH    ------ %
+
+\titleformat{\paragraph}
+    [runin]
+    { \RPGFontParagraph } % format
+    { \theparagraph \quad } % label
+    {0pt} % sep
+    {}    % before-code
+    [.]   % after-code
+
+\titlespacing*{\paragraph}
+    {0pt}      % left
+    {\parskip} % before-sep
+    {\wordsep} % after-sep
+
+
+%------     SUBPARAGRAPH    ------ %
+
+\titleformat{\subparagraph}
+    [runin]
+    { \RPGFontSubparagraph } % format
+    { \thesubparagraph \quad } % label
+    {0pt} % sep
+    {}    % before-code
+    [.]   % after-code
+
+\titlespacing*{\subparagraph}
+    {\parindent} % left
+    {\parskip}   % before-sep
+    {\wordsep}   % after-sep
+
+
+
+
+%=======================================================================================
+%   COMMANDS
+
+\NewDocumentCommand{\RPGLayoutJustification}
+    {}
+    {\l__rpg_layout_justification_tl}
