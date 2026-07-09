@@ -11,8 +11,14 @@ Inspired by [DND-5e-LaTeX-Template](https://github.com/rpgtex/DND-5e-LaTeX-Templ
 Modules can either be loaded as a bundle using the overarching `rpg` package, or individually with independent options.
 
 ```latex
-\usepackage[<options>]{rpg}
+\usepackage[
+  theme=<themename>,
+  alignment=<ragged|raggedright|justified>,
+  columns=<one|two>
+]{rpg}
 ```
+
+The bundle accepts explicit key/value options only. Shortcut options such as `twocolumn` are available on individual modules where documented, but not on `rpg`.
 
 `rpg` and all of its submodules define custom RPG variants of many standard LaTeX commands --- for example `\RPGChapter` for `\chapter` --- with identical basic usage, but extended package-specific options. When used as standalone packages, these usually do not interfere with the basic commands and they can be used independently in the same document.
 
