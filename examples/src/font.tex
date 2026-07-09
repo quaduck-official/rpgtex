@@ -1,0 +1,48 @@
+\documentclass{book}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RPGFONT PACKAGE 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Load the package. Without an option, the package selects raggedright as default.
+\usepackage{rpgfont}
+% You can also choose a justification
+% \usepackage[justfification=raggedright]{rpgfont}
+% \usepackage[raggedright]{rpgfont}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   DEMO HELPERS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% helper command 
+\newcommand{\FontDemo}[1]
+{%
+    { #1 \string#1 \par} \vspace{1em}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\FontDemo{\RPGFontChapter}
+\FontDemo{\RPGFontSection}
+\FontDemo{\RPGFontSubsection}
+\FontDemo{\RPGFontSubsubsection}
+
+\FontDemo{\RPGFontTableTitle}
+\FontDemo{\RPGFontTableHeader}
+\FontDemo{\RPGFontTableBody}
+
+\FontDemo{\RPGFontParagraph}
+\FontDemo{\RPGFontSubparagraph}
+
+% an example of how chaning rpgcolor settings changes the font style
+\RPGColorThemeApply{maritime}
+
+\FontDemo{\RPGFontChapter}
+\FontDemo{\RPGFontSection}
+\FontDemo{\RPGFontSubsection}
+\FontDemo{\RPGFontSubsubsection}
+
+\end{document}
