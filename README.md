@@ -14,7 +14,7 @@ Modules can either be loaded as a bundle using the overarching `rpg` package, or
 \usepackage[<options>]{rpg}
 ```
 
-`rpg` and all of its submodules define custom RPG variants of many standard LaTeX commands --- for example `\RPGChapter` for `\chapter` --- with identical basic usage, but extended package-specific options. When used as standalone packages, these do not interfere with the basic commands and they can be used independently in the same document.
+`rpg` and all of its submodules define custom RPG variants of many standard LaTeX commands --- for example `\RPGChapter` for `\chapter` --- with identical basic usage, but extended package-specific options. When used as standalone packages, these usually do not interfere with the basic commands and they can be used independently in the same document.
 
 ### `documentclass`
 
@@ -25,12 +25,13 @@ Modules can either be loaded as a bundle using the overarching `rpg` package, or
 |------|-------------|
 | `rpgcolor` | Color schemes and themes |
 | `rpgfont`  | Font families, colors, and styles |
+| `rpglayout`  | Page layout and geometry |
 
 
 ### `rpgcolor`
 
 ```latex
-\usepackage[<theme>]{rpgcolor}
+\usepackage[<themename>]{rpgcolor}
 ```
 
 Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrimson`, etc) as well as semantic wrappers for different styling concepts used by other RPG modules (`RPGColorTitle`, `RPGColorStatBlock`, etc). These can be set to different color values independently or in batches using named themes.
@@ -90,3 +91,18 @@ Defines a few font families and styles (`RPGFontFamilySerif`, `RPGFontStyleEmpha
 
 **Predefined Values**
  - Please see `rpgfont.sty` for a list of all defined font families, styles, and typefaces.
+
+### `rpglayout`
+
+```latex
+\usepackage[
+  alignment=<ragged|raggedright|justified>,
+  columns=<one|two>
+]{rpglayout}
+```
+
+Modifies a large number of layout and sectioning lengths and behaviors for the document. `justification` is also accepted as an alias for `alignment`, and `column` as an alias for `columns`. Shortcut options are also available: `ragged`, `raggedright`, `justified`, `onecolumn`, and `twocolumn`.
+
+**RPG Dependencies**
+ - `rpgcolor`
+ - `rpgfont`
