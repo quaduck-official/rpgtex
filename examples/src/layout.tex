@@ -1,0 +1,40 @@
+\documentclass{book}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RPGLAYOUT PACKAGE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{lipsum}
+
+% Load the package. Without options, rpglayout uses ragged-right, one-column layout.
+\usepackage[alignment=justified,columns=two]{rpglayout}
+
+% You can also use shortcut options:
+% \usepackage[raggedright,twocolumn]{rpglayout}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\chapter{Layout Example}
+
+\section{Exploration}
+
+The old road winds through the forest until it reaches a ruined watchtower.
+The layout package sets page geometry, paragraph spacing, list spacing, heading
+formatting, and optional column mode. \lipsum[1]
+
+\subsection{Travel Notes}
+
+\begin{itemize}
+    \item The trail is narrow and overgrown.
+    \item Lantern light reveals old claw marks on the stones.
+    \item A cold wind blows from the tower entrance.
+\end{itemize}
+
+\section{Encounter}
+
+Use \texttt{alignment=justified} for justified text and headings, or
+\texttt{columns=one} for a single-column page. \lipsum[2]
+
+\end{document}

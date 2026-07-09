@@ -67,6 +67,7 @@
 \AtBeginDocument
 {
     \bool_if:NT \l__rpg_layout_twocolumn_bool { \twocolumn }
+    \RPGFontBody \RPGLayoutJustification
 }
 
 
@@ -152,18 +153,18 @@
 \titleformat{\part}
     [display]
     { \centering \RPGFontPart } % format
-    { \RPGContour{\partname\ \thepart} } % label
+    { \RPGFontContour{\partname\ \thepart} } % label
     { 2ex } % sep
-    { \RPGContour } % before-code
+    { \RPGFontContour } % before-code
 
 
 %------     CHAPTER    ------ %
 
 \titleformat{\chapter}
     { \RPGFontChapter } % format
-    { \RPGContour{\chaptertitlename\ \thechapter :} } % label
+    { \RPGFontContour{\chaptertitlename\ \thechapter :} } % label
     { \wordsep } % sep
-    { \RPGContour } % before-code
+    { \RPGFontContour } % before-code
 
 \titlespacing*{\chapter}
     { 0pt }  % left
