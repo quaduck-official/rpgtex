@@ -6,21 +6,25 @@ Inspired by [DND-5e-LaTeX-Template](https://github.com/rpgtex/DND-5e-LaTeX-Templ
 
 ## Usage
 
-### `documentclass`
-
 ### `usepackage`
 
 Modules can either be loaded as a bundle using the overarching `rpg` package, or individually with independent options.
 
 ```latex
-\usepackage{rpg}
+\usepackage[<options>]{rpg}
 ```
+
+`rpg` and all of its submodules define custom RPG variants of many standard LaTeX commands --- for example `\RPGChapter` for `\chapter` --- with identical basic usage, but extended package-specific options. When used as standalone packages, these do not interfere with the basic commands and they can be used independently in the same document.
+
+### `documentclass`
+
 
 ## Individual Packages
 
 | Package | Description |
 |------|-------------|
 | `rpgcolor` | Color schemes and themes |
+| `rpgfont`  | Font families, alignment, colors, and styles |
 
 
 ### `rpgcolor`
@@ -31,8 +35,8 @@ Modules can either be loaded as a bundle using the overarching `rpg` package, or
 
 Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrimson`, etc) as well as semantic wrappers for different styling concepts used by other RPG modules (`RPGColorTitle`, `RPGColorStatBlock`, etc). These can be set to different color values independently or in batches using named themes.
 
-**Predefined Colors**
- - Please see `rpgcolor.sty` for a list of all defined colors.
+**RPG Dependencies**
+ - None
 
 **User API**:
  - `\RPGColorSet` takes a k/v list of semantic wrapper names as keys and xcolor definitions as values and updates the corresponding values.
@@ -54,6 +58,9 @@ Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrim
 | contour   | `RPGColorContour` |
 | footer    | `RPGColorFooter` |
 
+**Predefined Colors**
+ - Please see `rpgcolor.sty` for a list of all defined colors.
+
 **Predefined Themes**
  - *default*: Bone and parchment with umber titles, forest rules, and rust accents.
  - *PHB2014*: Light green PHB trim with tan backgrounds, red titles, and gold accents.
@@ -66,3 +73,20 @@ Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrim
  - *underdark*: Moonstone and slate with ink titles and nightshade ribbons.
  - *druidic*: Olive and celadon with forest titles and verdigris rules.
  - *desert*: Vellum and parchment with umber titles and gold ribbons.
+
+### `rpgfont`
+
+```latex
+\usepackage[justification=<ragged|raggedright|justified>]{rpgfont}
+```
+
+Defines a few font families and styles (`RPGFontFamilySerif`, `RPGFontStyleEmphasis`, etc) as well as semantic wrappers for different combinations of color, face, and style used for different RPG typesetting purposes (`RPGFontHeader`, `RPGFontTableBody`, etc). *Does not change or set any existing document fonts to these new values*.
+
+**RPG Dependencies**
+ - `rpgcolor`
+
+**User API**:
+ - `\RPGFontSet` accepts a set of key/value pairs for altering any of the predefined font values.
+
+**Predefined Values**
+ - Please see `rpgfont.sty` for a list of all defined font families, styles, and typefaces.
