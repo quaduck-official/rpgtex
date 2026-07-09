@@ -9,6 +9,7 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage[type1]{gillius2}
 \RequirePackage[notext,nomath,nott]{kpfonts}
+\RequirePackage{contour}
 \RequirePackage{ragged2e}
 \RequirePackage{xcolor}
 
@@ -410,112 +411,224 @@
     dice-style .value_required:n = true,
 }
 
-\NewDocumentCommand { \RPGFontSet } { O{} }
+%======================================================================================
+%   COMMANDS
+
+\NewDocumentCommand{\RPGFontSet}{ O{} }
 {
     \keys_set:nn { rpg / fonts } { #1 }
 }
 
-%==============================================================================
-% Font access functions combine the selected family and style
-%==============================================================================
 
-% Sectioning commands
+
+%--------------------------------------------------------------------------------------
+%   FONTS
+
 \NewDocumentCommand{\RPGFontBody}{}
-{ \l__rpg_body_family_tl \l__rpg_body_color_tl \l__rpg_body_style_tl }
+{
+    \l__rpg_body_family_tl \l__rpg_body_color_tl \l__rpg_body_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontPart}{}
-{ \l__rpg_part_family_tl \l__rpg_part_color_tl \l__rpg_part_style_tl}
+{
+    \l__rpg_part_family_tl \l__rpg_part_color_tl \l__rpg_part_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontChapter}{}
-{ \l__rpg_chapter_family_tl \l__rpg_chapter_color_tl \l__rpg_chapter_style_tl }
+{
+    \l__rpg_chapter_family_tl \l__rpg_chapter_color_tl \l__rpg_chapter_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontSection}{}
-{ \l__rpg_section_family_tl \l__rpg_section_color_tl \l__rpg_section_style_tl }
+{
+    \l__rpg_section_family_tl \l__rpg_section_color_tl \l__rpg_section_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontSubsection}{}
-{ \l__rpg_subsection_family_tl \l__rpg_subsection_color_tl \l__rpg_subsection_style_tl }
+{
+    \l__rpg_subsection_family_tl \l__rpg_subsection_color_tl \l__rpg_subsection_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontSubsubsection}{}
-{ \l__rpg_subsubsection_family_tl \l__rpg_subsubsection_color_tl \l__rpg_subsubsection_style_tl }
+{
+    \l__rpg_subsubsection_family_tl \l__rpg_subsubsection_color_tl \l__rpg_subsubsection_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontParagraph}{}
-{ \l__rpg_paragraph_family_tl \l__rpg_paragraph_color_tl \l__rpg_paragraph_style_tl }
+{
+    \l__rpg_paragraph_family_tl \l__rpg_paragraph_color_tl \l__rpg_paragraph_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontSubparagraph}{}
-{ \l__rpg_subparagraph_family_tl \l__rpg_subparagraph_color_tl \l__rpg_subparagraph_style_tl }
+{
+    \l__rpg_subparagraph_family_tl \l__rpg_subparagraph_color_tl \l__rpg_subparagraph_style_tl
+}
 
 % Tables
 \NewDocumentCommand{\RPGFontTableTitle}{}
-{ \l__rpg_table_title_family_tl \l__rpg_table_title_color_tl \l__rpg_table_title_style_tl }
+{
+    \l__rpg_table_title_family_tl \l__rpg_table_title_color_tl \l__rpg_table_title_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontTableHeader}{}
-{ \l__rpg_table_header_family_tl \l__rpg_table_header_color_tl \l__rpg_table_header_style_tl }
+{
+    \l__rpg_table_header_family_tl \l__rpg_table_header_color_tl \l__rpg_table_header_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontTableBody}{}
-{ \l__rpg_table_body_family_tl \l__rpg_table_body_color_tl \l__rpg_table_body_style_tl }
+{
+    \l__rpg_table_body_family_tl \l__rpg_table_body_color_tl \l__rpg_table_body_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontCaption}{}
-{ \l__rpg_caption_family_tl \l__rpg_caption_color_tl \l__rpg_caption_style_tl }
+{
+    \l__rpg_caption_family_tl \l__rpg_caption_color_tl \l__rpg_caption_style_tl
+}
 
 % Comment boxes
 \NewDocumentCommand{\RPGFontCommentTitle}{}
-{ \l__rpg_comment_title_family_tl \l__rpg_comment_title_color_tl \l__rpg_comment_title_style_tl }
+{
+    \l__rpg_comment_title_family_tl \l__rpg_comment_title_color_tl \l__rpg_comment_title_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontCommentBody}{}
-{ \l__rpg_comment_body_family_tl \l__rpg_comment_body_color_tl \l__rpg_comment_body_style_tl }
+{
+    \l__rpg_comment_body_family_tl \l__rpg_comment_body_color_tl \l__rpg_comment_body_style_tl
+}
 
 % Sidebars
 \NewDocumentCommand{\RPGFontSidebarTitle}{}
-{ \l__rpg_sidebar_title_family_tl \l__rpg_sidebar_title_color_tl \l__rpg_sidebar_title_style_tl }
+{
+    \l__rpg_sidebar_title_family_tl \l__rpg_sidebar_title_color_tl \l__rpg_sidebar_title_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontSidebarBody}{}
-{ \l__rpg_sidebar_body_family_tl \l__rpg_sidebar_body_color_tl \l__rpg_sidebar_body_style_tl }
+{
+    \l__rpg_sidebar_body_family_tl \l__rpg_sidebar_body_color_tl \l__rpg_sidebar_body_style_tl
+}
 
 % Read-aloud boxes
 \NewDocumentCommand{\RPGFontReadAloud}{}
-{ \l__rpg_readaloud_family_tl \l__rpg_readaloud_color_tl \l__rpg_readaloud_style_tl }
+{
+    \l__rpg_readaloud_family_tl \l__rpg_readaloud_color_tl \l__rpg_readaloud_style_tl
+}
 
 % Table of Contents
 \NewDocumentCommand{\RPGFontTocPart}{}
-{ \l__rpg_toc_part_family_tl \l__rpg_toc_part_color_tl \l__rpg_toc_part_style_tl}
+{
+    \l__rpg_toc_part_family_tl \l__rpg_toc_part_color_tl \l__rpg_toc_part_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontTocChapter}{}
-{ \l__rpg_toc_chapter_family_tl \l__rpg_toc_chapter_color_tl \l__rpg_toc_chapter_style_tl}
+{
+    \l__rpg_toc_chapter_family_tl \l__rpg_toc_chapter_color_tl \l__rpg_toc_chapter_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontTocSection}{}
-{ \l__rpg_toc_section_family_tl \l__rpg_toc_section_color_tl \l__rpg_toc_section_style_tl}
+{
+    \l__rpg_toc_section_family_tl \l__rpg_toc_section_color_tl \l__rpg_toc_section_style_tl
+}
 
 % Stat blocks
 \NewDocumentCommand{\RPGFontStatBlockTitle}{}
-{ \l__rpg_stat_block_title_family_tl \l__rpg_stat_block_title_color_tl \l__rpg_stat_block_title_style_tl }
+{
+    \l__rpg_stat_block_title_family_tl \l__rpg_stat_block_title_color_tl \l__rpg_stat_block_title_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontStatBlockBody}{}
-{ \l__rpg_stat_block_body_family_tl \l__rpg_stat_block_body_color_tl \l__rpg_stat_block_body_style_tl }
+{
+    \l__rpg_stat_block_body_family_tl \l__rpg_stat_block_body_color_tl \l__rpg_stat_block_body_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontStatBlockSection}{}
-{ \l__rpg_stat_block_section_family_tl \l__rpg_stat_block_section_color_tl \l__rpg_stat_block_section_style_tl }
+{
+    \l__rpg_stat_block_section_family_tl \l__rpg_stat_block_section_color_tl \l__rpg_stat_block_section_style_tl
+}
 
 % Miscellaneous
 \NewDocumentCommand{\RPGFontFooter}{}
-{ \l__rpg_footer_family_tl \l__rpg_footer_color_tl \l__rpg_footer_style_tl }
+{
+    \l__rpg_footer_family_tl \l__rpg_footer_color_tl \l__rpg_footer_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontPageNumber}{}
-{ \l__rpg_page_number_family_tl \l__rpg_page_number_color_tl \l__rpg_page_number_style_tl }
+{
+    \l__rpg_page_number_family_tl \l__rpg_page_number_color_tl \l__rpg_page_number_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontHeader}{}
-{ \l__rpg_header_family_tl \l__rpg_header_color_tl \l__rpg_header_style_tl }
+{
+    \l__rpg_header_family_tl \l__rpg_header_color_tl \l__rpg_header_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontIncipit}{}
-{ \l__rpg_incipit_family_tl \l__rpg_incipit_color_tl \l__rpg_incipit_style_tl }
+{
+    \l__rpg_incipit_family_tl \l__rpg_incipit_color_tl \l__rpg_incipit_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontDefinition}{}
-{ \l__rpg_definition_family_tl \l__rpg_definition_color_tl \l__rpg_definition_style_tl }
+{
+    \l__rpg_definition_family_tl \l__rpg_definition_color_tl \l__rpg_definition_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontTerm}{}
-{ \l__rpg_term_family_tl \l__rpg_term_color_tl \l__rpg_term_style_tl }
+{
+    \l__rpg_term_family_tl \l__rpg_term_color_tl \l__rpg_term_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontCode}{}
-{ \l__rpg_code_family_tl \l__rpg_code_color_tl \l__rpg_code_style_tl }
+{
+    \l__rpg_code_family_tl \l__rpg_code_color_tl \l__rpg_code_style_tl
+}
+
 
 \NewDocumentCommand{\RPGFontDice}{}
-{ \l__rpg_dice_family_tl \l__rpg_dice_color_tl \l__rpg_dice_style_tl }
+{
+    \l__rpg_dice_family_tl \l__rpg_dice_color_tl \l__rpg_dice_style_tl
+}
+
+
+
+%--------------------------------------------------------------------------------------
+%   OTHER
+
+\cs_new_protected:Npn \__rpg_contour_preserve_space:nn #1#2
+{
+    \group_begin:
+    \seq_set_split:Nnn \l_tmpa_seq { ~ } { #2 }
+    \seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\contour{#1}{##1}} }
+    \seq_use:Nn \l_tmpb_seq { ~ }
+    \group_end:
+}
+
+
+\NewDocumentCommand{\RPGFontContour}{ O{RPGColorContour} m }
+{
+    \group_begin:
+    \seq_set_split:Nnn \l_tmpa_seq { \newline } { #2 }
+    \seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\__rpg_contour_preserve_space:nn{#1}{##1}} }
+    \seq_use:Nn \l_tmpb_seq { \newline }
+    \group_end:
+}
