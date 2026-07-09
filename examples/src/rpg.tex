@@ -1,0 +1,42 @@
+\documentclass{book}
+\usepackage{lipsum}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RPG BUNDLE PACKAGE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The bundle accepts explicit key/value options and routes them to its modules.
+\usepackage[
+    theme=maritime,
+    alignment=raggedright,
+    columns=two,
+]{rpg}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\chapter{RPG Bundle Example}
+
+\section{The Old Road}
+
+The road follows a cold river through pine woods.  The \texttt{rpg} package loads the color, font, and layout modules together.  This example uses the maritime color theme, ragged-right body text, RPG heading styles, and a two-column page layout.
+
+\lipsum[1]
+
+\subsection{Travel Notes}
+
+\begin{itemize}
+    \item Blue lanterns mark the path to a ruined watchtower.
+    \item The stones are carved with warnings in an older tongue.
+\end{itemize}
+
+\section{At the Tower}
+
+The bundle interface intentionally uses key/value options. Shortcut options such
+as \texttt{twocolumn} are available on \texttt{rpglayout}, but not on
+\texttt{rpg}.
+
+\lipsum[2]
+
+\end{document}
