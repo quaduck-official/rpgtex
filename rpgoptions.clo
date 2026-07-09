@@ -1,0 +1,54 @@
+\ProvidesExplFile
+    {rpgoptions.clo}
+    {2026-07-09}
+    {0.1}
+    {Shared RPG option routing.}
+
+%=======================================================================================
+%   RPG OPTIONS
+%=======================================================================================
+
+\RequirePackage { l3keys2e }
+
+\msg_new:nnn { rpg } { options / unknown }
+    { Unknown~rpg~option~"#1". }
+
+\tl_new:N \l__rpg_options_color_tl
+\tl_new:N \l__rpg_options_font_tl
+\tl_new:N \l__rpg_options_layout_tl
+
+\keys_define:nn { rpg / options }
+{
+    theme .code:n =
+        { \tl_put_right:Nn \l__rpg_options_color_tl { theme = #1, } },
+    theme .value_required:n = true,
+
+    alignment .code:n =
+        { \tl_put_right:Nn \l__rpg_options_layout_tl { alignment = #1, } },
+    alignment .value_required:n = true,
+
+    columns .code:n =
+        { \tl_put_right:Nn \l__rpg_options_layout_tl { columns = #1, } },
+    columns .value_required:n = true,
+
+    unknown .code:n =
+        { \msg_error:nnx { rpg } { options / unknown } { \l_keys_key_tl } },
+}
+
+\cs_new_protected:Npn \__rpg_options_pass:Nn #1#2
+{
+    \tl_if_empty:NF #1
+    {
+        \exp_args:NV \PassOptionsToPackage #1 { #2 }
+    }
+}
+
+\cs_new_protected:Npn \__rpg_options_pass_to_packages:
+{
+    \__rpg_options_pass:Nn \l__rpg_options_color_tl  { rpgcolor }
+    \__rpg_options_pass:Nn \l__rpg_options_font_tl   { rpgfont }
+    \__rpg_options_pass:Nn \l__rpg_options_layout_tl { rpglayout }
+}
+
+\ProcessKeysOptions { rpg / options }
+\__rpg_options_pass_to_packages:
