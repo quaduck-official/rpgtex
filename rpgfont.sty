@@ -13,28 +13,6 @@
 \RequirePackage{ragged2e}
 \RequirePackage{xcolor}
 
-\tl_new:N \l__rpg_font_justification_tl
-\tl_set:Nn \l__rpg_font_justification_tl { \RaggedRight }
-
-\keys_define:nn { rpg / font / options }
-{
-    justification .choice:,
-    justification / raggedright .code:n =
-        { \tl_set:Nn \l__rpg_font_justification_tl { \RaggedRight } },
-    justification / ragged .code:n =
-        { \tl_set:Nn \l__rpg_font_justification_tl { \RaggedRight } },
-    justification / justified .code:n =
-        { \tl_clear:N \l__rpg_font_justification_tl },
-
-    raggedright .code:n =
-        { \tl_set:Nn \l__rpg_font_justification_tl { \RaggedRight } },
-    ragged .code:n =
-        { \tl_set:Nn \l__rpg_font_justification_tl { \RaggedRight } },
-    justified .code:n =
-        { \tl_clear:N \l__rpg_font_justification_tl },
-}
-\ProcessKeysOptions { rpg / font / options }
-
 % Load rpgcolor after processing rpgfont options to avoid collisions
 \RequirePackage{rpgcolor}
 
@@ -52,8 +30,6 @@
 \NewDocumentCommand { \RPGFontStyleTitle } {} { \bfseries \scshape }
 \NewDocumentCommand { \RPGFontStyleEmphasis } {} { \bfseries \slshape }
 \NewDocumentCommand { \RPGFontStyleHeader } {} { \Huge \scshape }
-
-\NewDocumentCommand { \RPGFontJustification } {} { \l__rpg_font_justification_tl }
 
 
 %==============================================================================
@@ -112,7 +88,7 @@
     section-color .initial:n        = \color{RPGColorTitle},
     section-color .value_required:n = true,
     section-style .tl_set:N         = \l__rpg_section_style_tl,
-    section-style .initial:n        = \linespread{.9} \huge \scshape \RPGFontJustification,
+    section-style .initial:n        = \linespread{.9} \huge \scshape,
     section-style .value_required:n = true,
 
     % Subsection
@@ -123,7 +99,7 @@
     subsection-color .initial:n        = \color{RPGColorTitle},
     subsection-color .value_required:n = true,
     subsection-style .tl_set:N         = \l__rpg_subsection_style_tl,
-    subsection-style .initial:n        = \linespread{.9} \Large \scshape \RPGFontJustification,
+    subsection-style .initial:n        = \linespread{.9} \Large \scshape,
     subsection-style .value_required:n = true,
 
     % subsubsection
@@ -134,7 +110,7 @@
     subsubsection-color .initial:n        = \color{RPGColorTitle},
     subsubsection-color .value_required:n = true,
     subsubsection-style .tl_set:N         = \l__rpg_subsubsection_style_tl,
-    subsubsection-style .initial:n        = \linespread{.9} \large \scshape \RPGFontJustification,
+    subsubsection-style .initial:n        = \linespread{.9} \large \scshape,
     subsubsection-style .value_required:n = true,
 
     % paragraph

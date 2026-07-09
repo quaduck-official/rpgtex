@@ -24,7 +24,7 @@ Modules can either be loaded as a bundle using the overarching `rpg` package, or
 | Package | Description |
 |------|-------------|
 | `rpgcolor` | Color schemes and themes |
-| `rpgfont`  | Font families, alignment, colors, and styles |
+| `rpgfont`  | Font families, colors, and styles |
 
 
 ### `rpgcolor`
@@ -40,7 +40,7 @@ Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrim
 
 **User API**:
  - `\RPGColorSet` takes a k/v list of semantic wrapper names as keys and xcolor definitions as values and updates the corresponding values.
- - `\RPGColorThemeCreate` takes a string theme name and a k/v list (semantic wrapper names as keys and xcolor values as values) and saves a new color theme with that name and color definitions to the internal theme database. It does not update any actual color values; use `\RPGColorThemeApply` to do this.
+ - `\RPGColorThemeCreate` takes a string theme name and a k/v list (semantic wrapper names as keys and xcolor values as values) and saves a new color theme with that name and color definitions to the internal theme store. It does not update any actual color values; use `\RPGColorThemeApply` to do this.
  - `\RPGColorThemeApply` takes a string theme name and updates the color definitions with the corresponding saved theme values.
 
 **Semantic Wrapper Values**
@@ -77,7 +77,7 @@ Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrim
 ### `rpgfont`
 
 ```latex
-\usepackage[justification=<ragged|raggedright|justified>]{rpgfont}
+\usepackage{rpgfont}
 ```
 
 Defines a few font families and styles (`RPGFontFamilySerif`, `RPGFontStyleEmphasis`, etc) as well as semantic wrappers for different combinations of color, face, and style used for different RPG typesetting purposes (`RPGFontHeader`, `RPGFontTableBody`, etc). *Does not change or set any existing document fonts to these new values*.
