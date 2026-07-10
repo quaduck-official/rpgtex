@@ -1,0 +1,303 @@
+%======================================================================================
+%   RPGTABLE
+%======================================================================================
+
+\ProvidesExplPackage
+    {rpgtable}
+    {2026-06-30}
+    {0.5.0}
+    {Simple tabularx wrapper for RPG-style tables}
+
+%======================================================================================
+%   SETUP
+
+%--------------------------------------------------------------------------------------
+%   REQUIRE
+
+\RequirePackage{xparse}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{xcolor}
+\RequirePackage{colortbl}
+\RequirePackage{l3keys2e}
+
+\RequirePackage{rpgcolor}
+\RequirePackage{rpgfont}
+
+
+
+
+%======================================================================================
+%   DATA
+
+%--------------------------------------------------------------------------------------
+%   VARIABLES
+
+\tl_new:N   \g__rpg_table_default_color_tl
+\str_new:N  \g__rpg_table_default_striped_str
+\tl_new:N   \g__rpg_table_default_title_tl
+\tl_new:N   \g__rpg_table_default_width_tl
+\bool_new:N \g__rpg_table_default_header_row_bool
+
+\tl_gset:Nn       \g__rpg_table_default_color_tl {RPGColorTableRow}
+\str_gset:Nn      \g__rpg_table_default_striped_str {odd}
+\tl_gclear:N      \g__rpg_table_default_title_tl
+\tl_gset:Nn       \g__rpg_table_default_width_tl {\linewidth}
+\bool_gset_true:N \g__rpg_table_default_header_row_bool
+
+\tl_new:N   \l__rpg_table_color_tl
+\str_new:N  \l__rpg_table_striped_str
+\tl_new:N   \l__rpg_table_title_tl
+\dim_new:N  \l__rpg_table_width_dim
+\bool_new:N \l__rpg_table_header_row_bool
+
+\int_new:N \g__rpg_table_row_index_int
+
+\cs_new_eq:NN \__rpg_table_saved_ar_align:       \scan_stop:
+\cs_new_eq:NN \__rpg_table_saved_insert_column:  \scan_stop:
+\cs_new_eq:NN \__rpg_table_saved_insert_pcolumn: \scan_stop:
+\cs_new_eq:NN \__rpg_table_saved_next_row:       \scan_stop:
+
+% -----------------------------------------------------------------------------
+% Messages
+% -----------------------------------------------------------------------------
+\msg_new:nnn{rpgtable}{no-header-row-hook}
+{
+    Could~not~find~the~array~row~advance~hook.~
+    The~header-row~option~has~been~ignored.
+}
+
+
+%--------------------------------------------------------------------------------------
+%   OPTIONS TABLE DEFAULTS)
+
+\keys_define:nn {rpg / table / defaults}
+{
+    color .tl_gset:N = \g__rpg_table_default_color_tl,
+    color .value_required:n = true,
+
+    striped .choice:,
+    striped / odd .code:n =
+      { \str_gset:Nn \g__rpg_table_default_striped_str {odd} },
+    striped / even .code:n =
+      { \str_gset:Nn \g__rpg_table_default_striped_str {even} },
+    striped / none .code:n =
+      { \str_gset:Nn \g__rpg_table_default_striped_str {none} },
+    striped .value_required:n = true,
+
+    title .tl_gset:N = \g__rpg_table_default_title_tl,
+    title .value_required:n = true,
+
+    width .tl_gset:N = \g__rpg_table_default_width_tl,
+    width .value_required:n = true,
+
+    header-row .bool_gset:N = \g__rpg_table_default_header_row_bool,
+    header-row .default:n = true,
+}
+\ProcessKeysOptions {rpg / table / defaults}
+
+% -----------------------------------------------------------------------------
+% Per-table options
+% -----------------------------------------------------------------------------
+\keys_define:nn {rpg / table}
+{
+    color .tl_set:N = \l__rpg_table_color_tl,
+    color .value_required:n = true,
+
+    striped .choice:,
+    striped / odd .code:n =
+      { \str_set:Nn \l__rpg_table_striped_str {odd} },
+    striped / even .code:n =
+      { \str_set:Nn \l__rpg_table_striped_str {even} },
+    striped / none .code:n =
+      { \str_set:Nn \l__rpg_table_striped_str {none} },
+    striped .value_required:n = true,
+
+    title .tl_set:N = \l__rpg_table_title_tl,
+    title .value_required:n = true,
+
+    width .code:n = { \dim_set:Nn \l__rpg_table_width_dim {#1} },
+    width .value_required:n = true,
+
+    header-row .bool_set:N = \l__rpg_table_header_row_bool,
+    header-row .default:n = true,
+}
+
+% -----------------------------------------------------------------------------
+% Defaults
+% -----------------------------------------------------------------------------
+\cs_new_protected:Npn \__rpg_table_set_defaults:
+{
+    \tl_set_eq:NN \l__rpg_table_color_tl \g__rpg_table_default_color_tl
+
+    \str_set_eq:NN \l__rpg_table_striped_str \g__rpg_table_default_striped_str
+
+    \tl_set_eq:NN \l__rpg_table_title_tl \g__rpg_table_default_title_tl
+
+    \dim_set:Nn \l__rpg_table_width_dim { \g__rpg_table_default_width_tl }
+
+    \bool_set_eq:NN
+        \l__rpg_table_header_row_bool
+        \g__rpg_table_default_header_row_bool
+}
+
+% -----------------------------------------------------------------------------
+% Special columns
+% -----------------------------------------------------------------------------
+% Centered flexible-width tabularx column.
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+% -----------------------------------------------------------------------------
+% Header-row styling
+% -----------------------------------------------------------------------------
+% Locally inserts \RPGFontTableHeader into ordinary cells while the current
+% table row index is zero.
+\cs_new_protected:Npn \__rpg_table_header_cell_font:
+{
+    \int_compare:nNnT { \g__rpg_table_row_index_int } = { 0 }
+    {
+        \RPGFontTableHeader
+    }
+}
+
+\cs_new_protected:Npn \__rpg_table_patch_header_row:
+{
+    \cs_if_exist:NTF \tbl_update_cell_data_for_next_row:
+    {
+        % tabularx may typeset the table more than once while calculating X
+        % column widths. Reset the row index at the start of each alignment pass.
+        \cs_set_eq:NN \__rpg_table_saved_ar_align:
+        \ar@ialign
+
+        \cs_set:Npn \ar@ialign
+        {
+            \int_gset:Nn \g__rpg_table_row_index_int { -1 }
+            \__rpg_table_saved_ar_align:
+        }
+
+        % Ordinary l/c/r-style cells.
+        \cs_set_eq:NN \__rpg_table_saved_insert_column: \insert@column
+
+        \cs_set:Npn \insert@column
+        {
+            \exp_not:N \__rpg_table_header_cell_font:
+            \__rpg_table_saved_insert_column:
+        }
+
+        % Paragraph-style cells: p, m, b, and tabularx's rewritten X columns.
+        \cs_set_eq:NN \__rpg_table_saved_insert_pcolumn: \insert@pcolumn
+
+        \cs_set:Npn \insert@pcolumn
+        {
+            \exp_not:N \__rpg_table_header_cell_font:
+            \__rpg_table_saved_insert_pcolumn:
+        }
+
+        % The first body row has index 0. The initial preamble \cr advances from
+        % -1 to 0 before user rows are read.
+        \cs_set_eq:NN
+            \__rpg_table_saved_next_row:
+            \tbl_update_cell_data_for_next_row:
+
+        \cs_set_protected:Npn \tbl_update_cell_data_for_next_row:
+        {
+            \__rpg_table_saved_next_row:
+            \int_gincr:N \g__rpg_table_row_index_int
+        }
+    }
+    {
+        \msg_warning:nn {rpgtable} {no-header-row-hook}
+    }
+}
+
+% -----------------------------------------------------------------------------
+% Renderer
+% -----------------------------------------------------------------------------
+
+\cs_new_protected:Npn \__rpg_table_apply_row_colors:
+{
+    \str_if_eq:VnTF \l__rpg_table_striped_str {none}
+    {
+      \rowcolors {1} {} {}
+    }
+    {
+        % Stripe parity is relative to body rows; skip the header row if present.
+        \bool_if:NTF \l__rpg_table_header_row_bool
+        {
+            \str_if_eq:VnTF \l__rpg_table_striped_str {odd}
+            {
+                \rowcolors {2} {} {\l__rpg_table_color_tl}
+            }
+            {
+                \rowcolors {2} {\l__rpg_table_color_tl} {}
+            }
+        }
+        {
+            \str_if_eq:VnTF \l__rpg_table_striped_str {odd}
+            {
+                \rowcolors {1} {\l__rpg_table_color_tl} {}
+            }
+            {
+                \rowcolors {1} {} {\l__rpg_table_color_tl}
+            }
+        }
+    }
+}
+
+
+\cs_new_protected:Npn \__rpg_table_render:nnn #1#2#3
+{
+    \group_begin:
+        \__rpg_table_set_defaults:
+
+        \tl_if_blank:nF {#1}
+        {
+          \keys_set:nn {rpg / table} {#1}
+        }
+
+        \par\addvspace {9pt plus 3pt minus 3pt}\noindent
+
+        \tl_if_blank:VF \l__rpg_table_title_tl
+        {
+            \group_begin:
+                \RPGFontTableTitle
+                \tl_use:N \l__rpg_table_title_tl
+                \nopagebreak
+                \par\vspace {5pt plus 2pt minus 2pt}\noindent
+            \group_end:
+        }
+
+        \RPGFontTableBody
+
+        \bool_if:NT \l__rpg_table_header_row_bool
+        {
+            \__rpg_table_patch_header_row:
+        }
+
+        \__rpg_table_apply_row_colors:
+
+        \begin{tabularx}{\l__rpg_table_width_dim}{#2}
+            #3
+        \end{tabularx}
+
+        \rowcolors {1} {} {}
+
+        \par\addvspace {9pt plus 3pt minus 3pt}
+    \group_end:
+}
+
+% -----------------------------------------------------------------------------
+% Public backend for downstream wrappers
+% -----------------------------------------------------------------------------
+\NewDocumentCommand{\RPGTableRender}{O{} m +m}
+{
+    \__rpg_table_render:nnn {#1} {#2} {#3}
+}
+
+% -----------------------------------------------------------------------------
+% Body-collecting environment
+% -----------------------------------------------------------------------------
+\NewDocumentEnvironment{RPGTable}{O{} m +b}
+{
+    \__rpg_table_render:nnn {#1} {#2} {#3}
+}{ }
