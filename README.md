@@ -33,6 +33,7 @@ The bundle accepts explicit key/value options only. Shortcut options such as `tw
 | `rpgfont`  | Font families, colors, and styles |
 | `rpglayout`  | Page layout and geometry |
 | `rpgtable`  | Tables with headers and alternating colors |
+| `rpgskilltree` | Overlaid skill progression graphs |
 
 
 ### `rpgcolor`
@@ -124,7 +125,7 @@ Modifies a large number of layout and sectioning lengths and behaviors for the d
     striped=<odd|even|none>
     title=<title>
     width=<width>
-]{rpglayout}
+]{rpgtable}
 ```
 
 ```latex
@@ -140,7 +141,7 @@ Modifies a large number of layout and sectioning lengths and behaviors for the d
 \end{RPGTable}
 ```
 
-Provides a `tabularx` wrapper that alternates row color. Inherits default row color from the theme set by `rpgcolor`; other options can be given document-wide defaults, but each option can (and probably should, in the case of e.g. `title`) be supplied on a per-table basis. When loaded as part of the `rpg` package, no `rpgtable` options are exposed at the package level, meaining only the `rpgcolor` color theme API and per-table options are available.
+Provides a `tabularx` wrapper that alternates row color. Inherits default row color from the theme set by `rpgcolor`; other options can be given document-wide defaults, but each option can (and probably should, in the case of e.g. `title`) be supplied on a per-table basis. When loaded as part of the `rpg` package, no `rpgtable` options are exposed at the package level, meaning only the `rpgcolor` color theme API and per-table options are available.
 
 **RPG Dependencies**
  - `rpgcolor`
@@ -148,3 +149,37 @@ Provides a `tabularx` wrapper that alternates row color. Inherits default row co
 
 **User API**:
  - `RPGTable` environment with associated options.
+
+### `rpgskilltree`
+
+```latex
+\usepackage{rpgskilltree}
+```
+
+```latex
+\begin{RPGSkillTree}
+    % Place vertices in ordinary content.
+    \RPGSTVertex{start}
+    \RPGSTVertex[$\star$]{mastery}
+
+    % Draw links after the content has been typeset.
+    \RPGSkillTreeEdges
+    {%
+        \RPGSTEdge{start}{mastery}
+        \RPGSTEdge[bend left=15]{start}{mastery}
+    }
+\end{RPGSkillTree}
+```
+
+Provides a lightweight TikZ overlay for drawing directed progression links between named vertices placed inside other content, such as `RPGTable` rows. Each `RPGSkillTree` environment automatically prefixes its node names, so multiple skill trees can appear in the same document without name collisions. Styles can be customized with `\tikzset` using `rpgst/vertex` and `rpgst/edge`.
+
+**RPG Dependencies**
+ - None
+
+**User API**:
+ - `RPGSkillTree` environment scopes vertex names and draws stored edges at the end of the environment.
+ - `\RPGSTVertex[<content>]{<name>}` places a named vertex. The default content is `$\bullet$`.
+ - `\RPGSkillTreeEdges{<edges>}` stores the edge drawing commands for the current tree.
+ - `\RPGSTEdge[<tikz to options>]{<from>}{<to>}` draws a directed edge between two vertices. TikZ anchor suffixes such as `.east` are supported.
+ - `\RPGSTRef{<name>}` expands to the current tree's prefixed TikZ node name for custom paths.
+ - `\RPGSTDraw{<tikz code>}` runs custom TikZ drawing code inside the overlay picture.
