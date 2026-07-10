@@ -17,7 +17,7 @@ clean :
 	rm -rf $(DIR_PDF) $(DIR_BLD)
 
 
-$(DIR_PDF)/%.pdf : $(DIR_SRC)/%.tex $(LIB) | $(DIR_PDF) $(DIR_BLD)/%
+$(DIR_PDF)/%.pdf : $(DIR_SRC)/%.tex $(DIR_LIB)/%.sty | $(DIR_PDF) $(DIR_BLD)/%
 	TEXINPUTS=.:$(abspath $(DIR_LIB))//: \
 		  pdflatex -output-directory=$(abspath $(DIR_BLD))/$* $< \
 		  && mv $(DIR_BLD)/$*/$*.pdf $(DIR_PDF)/
