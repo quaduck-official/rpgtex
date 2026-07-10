@@ -1,40 +1,75 @@
-% rpgskilltree.sty -- overlay digraphs on other environments for skill progression
-% Version: 2026/06/30 v0.5
+%======================================================================================
+%   RPGSKILLTREE
+%======================================================================================
 
-\NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{rpgskilltree}[2026/06/30 v0.5]
+\ProvidesExplPackage
+    {rpgskilltree}
+    {2026-07-10}
+    {0.5.0}
+    {Overlay digraphs on other environments for skill progression}
+
+%======================================================================================
+%   SETUP
+
+%--------------------------------------------------------------------------------------
+%   REQUIRE
 
 \RequirePackage{xparse}
-\RequirePackage{tikz}
-\usetikzlibrary{tikzmark,arrows.meta}
 
-% Public TikZ styles. Override or extend in the document with, for example:
-%   \tikzset{rpgst/edge/.append style={thin}}
-\tikzset
-{%
-    rpgst/vertex/.style={
-        inner sep=1pt,
-        outer sep=0pt
-    },
-    rpgst/edge/.style={
-        ->,
-        >=Stealth,
-        shorten >=1pt,
-        shorten <=1pt
+\ExplSyntaxOff
+
+    \RequirePackage{tikz}
+    \usetikzlibrary{tikzmark,arrows.meta}
+
+    % Public TikZ styles. Override or extend in the document with, for example:
+    %   \tikzset{rpgst/edge/.append style={thin}}
+    \tikzset
+    {%
+        rpgst/vertex/.style={
+            inner sep=1pt,
+            outer sep=0pt
+        },
+        rpgst/edge/.style={
+            ->,
+            >=Stealth,
+            shorten >=1pt,
+            shorten <=1pt
+        }
     }
+
+\ExplSyntaxOn
+
+
+
+
+%======================================================================================
+%   DATA
+
+%--------------------------------------------------------------------------------------
+%   GLOBALS
+
+\int_new:N \g__rpg_skill_tree_index_int
+\tl_new:N  \g__rpg_skill_tree_prefix_tl
+\tl_new:N  \g__rpg_skill_tree_edges_tl
+
+
+
+%--------------------------------------------------------------------------------------
+%   CONTROL SEQUENCES
+
+\cs_new_protected:Npn \__rpg_skill_tree_reset:
+{
+    \int_gincr:N \g__rpg_skill_tree_index_int
+    \tl_gset:Ne \g__rpg_skill_tree_prefix_tl
+        { rpgst-\int_use:N \g__rpg_skill_tree_index_int - }
+    \tl_gclear:N \g__rpg_skill_tree_edges_tl
 }
 
-\newcounter{rpgskilltree}
-\newcommand{\RPGST@prefix}{}
-\newcommand{\RPGST@storededges}{}
 
-\newcommand{\RPGST@reset}
-{%
-    \stepcounter{rpgskilltree}%
-    \edef\RPGST@prefix{rpgst-\arabic{rpgskilltree}-}%
-    \global\let\RPGST@storededges\@empty
-    \global\let\RPGST@storedrows\@empty
-}
+
+
+%======================================================================================
+%   API
 
 % Mark a vertex.
 % Usage:
@@ -42,7 +77,7 @@
 %   \RPGSTVertex[$\bullet$]{name}
 \NewDocumentCommand{\RPGSTVertex}{O{$\bullet$}m}
 {%
-  \tikzmarknode[rpgst/vertex]{\RPGST@prefix#2}{#1}%
+    \tikzmarknode[rpgst/vertex]{\tl_use:N \g__rpg_skill_tree_prefix_tl #2}{#1}%
 }
 
 % Store edge commands inside the macro, but execute them only after the
@@ -51,7 +86,7 @@
 %   \RPGSkillTreeEdges{<\RPGSTEdge{a}{b}...>}
 \NewDocumentCommand{\RPGSkillTreeEdges}{+m}
 {%
-    \gdef\RPGST@storededges{#1}%
+    \tl_gset:Nn \g__rpg_skill_tree_edges_tl {#1}%
 }
 
 % Draw an edge between two named vertices. Anchor suffixes are allowed:
@@ -61,7 +96,10 @@
 %   \RPGSTEdge[out=0,in=180]{a.east}{b.west}
 \NewDocumentCommand{\RPGSTEdge}{O{}mm}
 {%
-  \draw[rpgst/edge] (\RPGST@prefix#2) to[#1] (\RPGST@prefix#3);%
+    \draw[rpgst/edge]
+        (\tl_use:N \g__rpg_skill_tree_prefix_tl #2)
+        to[#1]
+        (\tl_use:N \g__rpg_skill_tree_prefix_tl #3);%
 }
 
 % Reference the automatically-prefixed TikZ node name in custom paths.
@@ -69,7 +107,7 @@
 %   \RPGSTDraw{\draw[rpgst/edge] (\RPGSTRef{a}.east) -| (\RPGSTRef{b}.north);}
 \NewDocumentCommand{\RPGSTRef}{m}
 {%
-    \RPGST@prefix#1%
+    \tl_use:N \g__rpg_skill_tree_prefix_tl #1%
 }
 
 % Raw TikZ escape hatch for custom routing.
@@ -81,10 +119,10 @@
 % Environment:
 \NewDocumentEnvironment{RPGSkillTree}{}
 {%
-    \RPGST@reset%
+    \__rpg_skill_tree_reset:%
 }
 {%
-    \begin{tikzpicture}[remember picture, overlay]
-        \RPGST@storededges
+    \begin{tikzpicture}[remember~picture, overlay]
+        \tl_use:N \g__rpg_skill_tree_edges_tl
     \end{tikzpicture}%
 }
