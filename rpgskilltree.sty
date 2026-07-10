@@ -80,13 +80,13 @@
     \tikzmarknode[rpgst/vertex]{\tl_use:N \g__rpg_skill_tree_prefix_tl #2}{#1}%
 }
 
-% Store edge commands inside the macro, but execute them only after the
-% environment closes
+% Store edge commands, but execute them only after the environment closes.
+% Multiple calls append to the current tree.
 % Usage:
 %   \RPGSkillTreeEdges{<\RPGSTEdge{a}{b}...>}
 \NewDocumentCommand{\RPGSkillTreeEdges}{+m}
 {%
-    \tl_gset:Nn \g__rpg_skill_tree_edges_tl {#1}%
+    \tl_gput_right:Nn \g__rpg_skill_tree_edges_tl {#1}%
 }
 
 % Draw an edge between two named vertices. Anchor suffixes are allowed:
