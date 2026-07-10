@@ -12,9 +12,9 @@ Modules can either be loaded as a bundle using the overarching `rpg` package, or
 
 ```latex
 \usepackage[
-  theme=<themename>,
-  alignment=<ragged|raggedright|justified>,
-  columns=<one|two>
+    colortheme=<themename>,
+    alignment=<ragged|raggedright|justified>,
+    columns=<one|two>
 ]{rpg}
 ```
 
@@ -32,6 +32,7 @@ The bundle accepts explicit key/value options only. Shortcut options such as `tw
 | `rpgcolor` | Color schemes and themes |
 | `rpgfont`  | Font families, colors, and styles |
 | `rpglayout`  | Page layout and geometry |
+| `rpgtable`  | Tables with headers and alternating colors |
 
 
 ### `rpgcolor`
@@ -102,8 +103,8 @@ Defines a few font families and styles (`RPGFontFamilySerif`, `RPGFontStyleEmpha
 
 ```latex
 \usepackage[
-  alignment=<ragged|raggedright|justified>,
-  columns=<one|two>
+    alignment=<ragged|raggedright|justified>,
+    columns=<one|two>
 ]{rpglayout}
 ```
 
@@ -112,3 +113,37 @@ Modifies a large number of layout and sectioning lengths and behaviors for the d
 **RPG Dependencies**
  - `rpgcolor`
  - `rpgfont`
+
+
+### `rpgtable`
+
+```latex
+\usepackage[
+    color=<colorname>
+    header-row=<true|false>
+    striped=<odd|even|none>
+    title=<title>
+    width=<width>
+]{rpglayout}
+```
+
+```latex
+\begin[
+    color=<colorname>
+    header-row=<true|false>
+    striped=<odd|even|none>
+    title=<title>
+    width=<width>
+]{RPGTable}
+    % ...
+\end{RPGTable}
+```
+
+Provides a `tabularx` wrapper that alternates row color. Package options set global document-wide defaults; each option can also be changed on a per-table basis.
+
+**RPG Dependencies**
+ - `rpgcolor`
+ - `rpgfont`
+
+**User API**:
+ - `RPGTable` environment with associated options.
