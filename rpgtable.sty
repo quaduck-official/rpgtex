@@ -31,7 +31,7 @@
 %   DATA
 
 %--------------------------------------------------------------------------------------
-%   VARIABLES
+%   GLOBALS
 
 \tl_new:N   \g__rpg_table_default_color_tl
 \str_new:N  \g__rpg_table_default_striped_str
@@ -45,6 +45,11 @@
 \tl_gset:Nn       \g__rpg_table_default_width_tl {\linewidth}
 \bool_gset_true:N \g__rpg_table_default_header_row_bool
 
+
+
+%--------------------------------------------------------------------------------------
+%   LOCALS
+
 \tl_new:N   \l__rpg_table_color_tl
 \str_new:N  \l__rpg_table_striped_str
 \tl_new:N   \l__rpg_table_title_tl
@@ -53,10 +58,16 @@
 
 \int_new:N \g__rpg_table_row_index_int
 
+
+
+%--------------------------------------------------------------------------------------
+%   CONTROL SEQUENCES
+
 \cs_new_eq:NN \__rpg_table_saved_ar_align:       \scan_stop:
 \cs_new_eq:NN \__rpg_table_saved_insert_column:  \scan_stop:
 \cs_new_eq:NN \__rpg_table_saved_insert_pcolumn: \scan_stop:
 \cs_new_eq:NN \__rpg_table_saved_next_row:       \scan_stop:
+
 
 % -----------------------------------------------------------------------------
 % Messages
@@ -68,8 +79,13 @@
 }
 
 
+
+
+%======================================================================================
+%   OPTIONS
+
 %--------------------------------------------------------------------------------------
-%   OPTIONS TABLE DEFAULTS)
+%   GLOBAL DEFAULT
 
 \keys_define:nn {rpg / table / defaults}
 {
@@ -96,9 +112,11 @@
 }
 \ProcessKeysOptions {rpg / table / defaults}
 
-% -----------------------------------------------------------------------------
-% Per-table options
-% -----------------------------------------------------------------------------
+
+
+%--------------------------------------------------------------------------------------
+%   PER-TABLE
+
 \keys_define:nn {rpg / table}
 {
     color .tl_set:N = \l__rpg_table_color_tl,
