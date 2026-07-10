@@ -1,0 +1,67 @@
+\documentclass{book}
+
+\usepackage{rpgtable}
+\usepackage{rpgskilltree}
+
+\tikzset
+{%
+    rpgst/vertex/.append style={
+        draw=RPGColorTitle,
+    },
+    rpgst/edge/.append style={
+        draw=RPGColorTitle
+    }
+}
+
+\begin{document}
+
+\chapter*{Skill Tree Example}
+
+The skill tree package marks nodes inside any ordinary content and draws the progression links afterward. This lets a table declaration remain readable whilst the graph logic still stays in the one place.
+
+One-line table rows are usually too small to draw an edge between, so it is usually necessary (and makes the skill tree more visually interesting!) to use two or more columns to stagger the vertices.
+
+\begin{RPGSkillTree}
+
+    \begin{RPGTable}[title=Blade Dancer Path]{c c l X}
+        && Talent & Benefit \\
+        \RPGSTVertex{footwork} && Footwork & Move 5 feet after a missed melee attack. \\
+        &\RPGSTVertex{flourish} & Flourish & Add your proficiency bonus to one damage roll each turn. \\
+        \RPGSTVertex{riposte} && Riposte & Make a reaction attack after an enemy misses you. \\
+        &\RPGSTVertex[$\star$]{storm} & Steel Storm & Attack two adjacent enemies with the same action. \\
+        \RPGSTVertex{tempo} && Perfect Tempo & Regain your reaction when you reduce a foe to 0 hit points.
+    \end{RPGTable}
+
+    \RPGSkillTreeEdges
+    {%
+        \RPGSTEdge{footwork}{flourish}
+        \RPGSTEdge{footwork}{riposte}
+        \RPGSTEdge{flourish}{storm}
+        \RPGSTEdge{riposte}{storm}
+        \RPGSTEdge[bend left=18]{storm}{tempo}
+    }
+
+\end{RPGSkillTree}
+
+\begin{RPGSkillTree}
+
+    \begin{RPGTable}[title=Arcane Warden Path, header-row=false, color=RPGColorMoss]{c c l X}
+        \RPGSTVertex{ward} && Warding Sigil & Gain temporary hit points when you cast an abjuration spell. \\
+        & \RPGSTVertex{glyph} & Prepared Glyph & Store a 1st-level spell in an object during a short rest. \\
+        \RPGSTVertex{aegis} && Shared Aegis & Extend your Warding Sigil to an ally within 30 feet. \\
+        & \RPGSTVertex{mirror} & Mirror Rune & Redirect one failed saving throw to a willing duplicate. \\
+        \RPGSTVertex[$\diamond$]{bastion} && Living Bastion & Allies inside your aura gain resistance to force damage.
+    \end{RPGTable}
+
+    \RPGSkillTreeEdges
+    {%
+        \RPGSTEdge[out=0,in=180]{ward.east}{glyph.west}
+        \RPGSTEdge{ward}{aegis}
+        \RPGSTEdge{glyph}{mirror}
+        \RPGSTEdge{aegis}{bastion}
+        \RPGSTDraw{\draw[rpgst/edge, dashed] (\RPGSTRef{mirror}.south) |- (\RPGSTRef{bastion}.east);}
+    }
+
+\end{RPGSkillTree}
+
+\end{document}
