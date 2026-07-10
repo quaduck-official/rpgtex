@@ -128,18 +128,19 @@ Modifies a large number of layout and sectioning lengths and behaviors for the d
 ```
 
 ```latex
-\begin[
+\begin{RPGTable}
+[%
     color=<colorname>
     header-row=<true|false>
     striped=<odd|even|none>
     title=<title>
     width=<width>
-]{RPGTable}
+]{<columns...>}
     % ...
 \end{RPGTable}
 ```
 
-Provides a `tabularx` wrapper that alternates row color. Package options set global document-wide defaults; each option can also be changed on a per-table basis.
+Provides a `tabularx` wrapper that alternates row color. Inherits default row color from the theme set by `rpgcolor`; other options can be given document-wide defaults, but each option can (and probably should, in the case of e.g. `title`) be supplied on a per-table basis. When loaded as part of the `rpg` package, no `rpgtable` options are exposed at the package level, meaining only the `rpgcolor` color theme API and per-table options are available.
 
 **RPG Dependencies**
  - `rpgcolor`
