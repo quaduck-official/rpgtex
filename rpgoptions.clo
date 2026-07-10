@@ -19,9 +19,9 @@
 
 \keys_define:nn { rpg / options }
 {
-    theme .code:n =
+    colortheme .code:n =
         { \tl_put_right:Nn \l__rpg_options_color_tl { theme = #1, } },
-    theme .value_required:n = true,
+    colortheme .value_required:n = true,
 
     alignment .code:n =
         { \tl_put_right:Nn \l__rpg_options_layout_tl { alignment = #1, } },
