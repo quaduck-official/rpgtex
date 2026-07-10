@@ -51,6 +51,7 @@
 %   GLOBALS
 
 \int_new:N \g__rpg_skill_tree_index_int
+\int_new:N \g__rpg_skill_tree_depth_int
 \tl_new:N  \g__rpg_skill_tree_prefix_tl
 \tl_new:N  \g__rpg_skill_tree_edges_tl
 
@@ -62,11 +63,11 @@
 \keys_define:nn { rpg / skill tree / style }
 {
     vertex .code:n =
-        { \tikzset { rpgst/vertex/.append~style = {#1} } },
+        { \__rpg_skill_tree_style_vertex:n {#1} },
     vertex .value_required:n = true,
 
     edge .code:n =
-        { \tikzset { rpgst/edge/.append~style = {#1} } },
+        { \__rpg_skill_tree_style_edge:n {#1} },
     edge .value_required:n = true,
 }
 
@@ -80,16 +81,42 @@
     \int_gincr:N \g__rpg_skill_tree_index_int
     \tl_gset:Ne \g__rpg_skill_tree_prefix_tl
         { rpgst-\int_use:N \g__rpg_skill_tree_index_int - }
-    \__rpg_skill_tree_clear:
+    \tl_gclear:N \g__rpg_skill_tree_edges_tl
+
+    \int_compare:nNnT { \g__rpg_skill_tree_depth_int } = { 0 }
+    {
+        \__rpg_skill_tree_reset_styles:
+    }
 }
 
-\cs_new_protected:Npn \__rpg_skill_tree_clear:
+\cs_new_protected:Npn \__rpg_skill_tree_reset_styles:
 {
-    \tl_gclear:N \g__rpg_skill_tree_edges_tl
     \tikzset
     {
         rpgst/vertex/.style = { rpgst/default~vertex },
         rpgst/edge/.style = { rpgst/default~edge }
+    }
+}
+
+\cs_new_protected:Npn \__rpg_skill_tree_style_vertex:n #1
+{
+    \int_compare:nNnTF { \g__rpg_skill_tree_depth_int } > { 0 }
+    {
+        \tikzset { rpgst/vertex/.append~style = {#1} }
+    }
+    {
+        \tikzset { rpgst/default~vertex/.append~style = {#1} }
+    }
+}
+
+\cs_new_protected:Npn \__rpg_skill_tree_style_edge:n #1
+{
+    \int_compare:nNnTF { \g__rpg_skill_tree_depth_int } > { 0 }
+    {
+        \tikzset { rpgst/edge/.append~style = {#1} }
+    }
+    {
+        \tikzset { rpgst/default~edge/.append~style = {#1} }
     }
 }
 
@@ -177,9 +204,11 @@
 \NewDocumentEnvironment{RPGSkillTree}{}
 {%
     \__rpg_skill_tree_reset:%
+    \int_gincr:N \g__rpg_skill_tree_depth_int
 }
 {%
     \begin{tikzpicture}[remember~picture, overlay]
         \tl_use:N \g__rpg_skill_tree_edges_tl
     \end{tikzpicture}%
+    \int_gdecr:N \g__rpg_skill_tree_depth_int
 }
