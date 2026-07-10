@@ -21,20 +21,22 @@
     \RequirePackage{tikz}
     \usetikzlibrary{tikzmark,arrows.meta}
 
-    % Public TikZ styles. Override or extend in the document with, for example:
-    %   \tikzset{rpgst/edge/.append style={thin}}
+    % Public default TikZ styles. Override or extend in the document with, for example:
+    %   \tikzset{rpgst/default edge/.append style={thin}}
     \tikzset
     {%
-        rpgst/vertex/.style={
+        rpgst/default vertex/.style={
             inner sep=1pt,
             outer sep=0pt
         },
-        rpgst/edge/.style={
+        rpgst/default edge/.style={
             ->,
             >=Stealth,
             shorten >=1pt,
             shorten <=1pt
-        }
+        },
+        rpgst/vertex/.style={rpgst/default vertex},
+        rpgst/edge/.style={rpgst/default edge}
     }
 
 \ExplSyntaxOn
@@ -55,6 +57,22 @@
 
 
 %--------------------------------------------------------------------------------------
+%   OPTIONS
+
+\keys_define:nn { rpg / skill tree / style }
+{
+    vertex .code:n =
+        { \tikzset { rpgst/vertex/.append~style = {#1} } },
+    vertex .value_required:n = true,
+
+    edge .code:n =
+        { \tikzset { rpgst/edge/.append~style = {#1} } },
+    edge .value_required:n = true,
+}
+
+
+
+%--------------------------------------------------------------------------------------
 %   CONTROL SEQUENCES
 
 \cs_new_protected:Npn \__rpg_skill_tree_reset:
@@ -62,7 +80,41 @@
     \int_gincr:N \g__rpg_skill_tree_index_int
     \tl_gset:Ne \g__rpg_skill_tree_prefix_tl
         { rpgst-\int_use:N \g__rpg_skill_tree_index_int - }
+    \__rpg_skill_tree_clear:
+}
+
+\cs_new_protected:Npn \__rpg_skill_tree_clear:
+{
     \tl_gclear:N \g__rpg_skill_tree_edges_tl
+    \tikzset
+    {
+        rpgst/vertex/.style = { rpgst/default~vertex },
+        rpgst/edge/.style = { rpgst/default~edge }
+    }
+}
+
+
+\cs_new_protected:Npn \__rpg_skill_tree_vertex:nn #1#2
+{
+    \use:x
+    {
+        \exp_not:N \tikzmarknode
+        [ rpgst/vertex ]
+        { \tl_use:N \g__rpg_skill_tree_prefix_tl \exp_not:n {#2} }
+        { \exp_not:n {#1} }
+    }
+}
+
+\cs_new_protected:Npn \__rpg_skill_tree_edge:nnn #1#2#3
+{
+    \use:x
+    {
+        \exp_not:N \draw
+        [ rpgst/edge ]
+        ( \tl_use:N \g__rpg_skill_tree_prefix_tl \exp_not:n {#2} )
+        to[ \exp_not:n {#1} ]
+        ( \tl_use:N \g__rpg_skill_tree_prefix_tl \exp_not:n {#3} );
+    }
 }
 
 
@@ -71,13 +123,21 @@
 %======================================================================================
 %   API
 
+% Apply TikZ option fragments to this skill tree only.
+% Usage:
+%   \RPGSkillTreeStyle{vertex={draw=red}, edge={thick, draw=red}}
+\NewDocumentCommand{\RPGSkillTreeStyle}{m}
+{%
+    \keys_set:nn { rpg / skill tree / style } {#1}%
+}
+
 % Mark a vertex.
 % Usage:
 %   \RPGSTVertex{name}
 %   \RPGSTVertex[$\bullet$]{name}
 \NewDocumentCommand{\RPGSTVertex}{O{$\bullet$}m}
 {%
-    \tikzmarknode[rpgst/vertex]{\tl_use:N \g__rpg_skill_tree_prefix_tl #2}{#1}%
+    \__rpg_skill_tree_vertex:nn {#1} {#2}%
 }
 
 % Store edge commands, but execute them only after the environment closes.
@@ -96,10 +156,7 @@
 %   \RPGSTEdge[out=0,in=180]{a.east}{b.west}
 \NewDocumentCommand{\RPGSTEdge}{O{}mm}
 {%
-    \draw[rpgst/edge]
-        (\tl_use:N \g__rpg_skill_tree_prefix_tl #2)
-        to[#1]
-        (\tl_use:N \g__rpg_skill_tree_prefix_tl #3);%
+    \__rpg_skill_tree_edge:nnn {#1} {#2} {#3}%
 }
 
 % Reference the automatically-prefixed TikZ node name in custom paths.

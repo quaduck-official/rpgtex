@@ -158,6 +158,8 @@ Provides a `tabularx` wrapper that alternates row color. Inherits default row co
 
 ```latex
 \begin{RPGSkillTree}
+    \RPGSkillTreeStyle{vertex={draw=RPGColorTitle}, edge={thick, draw=RPGColorTitle}}
+
     % Place vertices in ordinary content.
     \RPGSTVertex{start}
     \RPGSTVertex[$\star$]{mastery}
@@ -171,13 +173,14 @@ Provides a `tabularx` wrapper that alternates row color. Inherits default row co
 \end{RPGSkillTree}
 ```
 
-Provides a lightweight TikZ overlay for drawing directed progression links between named vertices placed inside other content, such as `RPGTable` rows. Each `RPGSkillTree` environment automatically prefixes its node names, so multiple skill trees can appear in the same document without name collisions. Styles can be customized with `\tikzset` using `rpgst/vertex` and `rpgst/edge`.
+Provides a lightweight TikZ overlay for drawing directed progression links between named vertices placed inside other content, such as `RPGTable` rows. Each `RPGSkillTree` environment automatically prefixes its node names, so multiple skill trees can appear in the same document without name collisions. Global defaults can be customized with `\tikzset` using `rpgst/default vertex` and `rpgst/default edge`; per-tree current styles can be customized with `\RPGSkillTreeStyle` and used in custom drawing as `rpgst/vertex` and `rpgst/edge`.
 
 **RPG Dependencies**
  - None
 
 **User API**:
  - `RPGSkillTree` environment scopes vertex names and draws stored edges at the end of the environment.
+ - `\RPGSkillTreeStyle{vertex={<tikz options>}, edge={<tikz options>}}` appends TikZ options for vertices and edges in the current tree only. Styles reset at the end of the current `RPGSkillTree`.
  - `\RPGSTVertex[<content>]{<name>}` places a named vertex. The default content is `$\bullet$`.
  - `\RPGSkillTreeEdges{<edges>}` stores the edge drawing commands for the current tree.
  - `\RPGSTEdge[<tikz to options>]{<from>}{<to>}` draws a directed edge between two vertices. TikZ anchor suffixes such as `.east` are supported.

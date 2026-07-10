@@ -5,10 +5,10 @@
 
 \tikzset
 {%
-    rpgst/vertex/.append style={
+    rpgst/default vertex/.append style={
         draw=RPGColorTitle,
     },
-    rpgst/edge/.append style={
+    rpgst/default edge/.append style={
         draw=RPGColorTitle
     }
 }
@@ -22,6 +22,8 @@ The skill tree package marks nodes inside any ordinary content and draws the pro
 One-line table rows are usually too small to draw an edge between, so it is usually necessary (and makes the skill tree more visually interesting!) to use two or more columns to stagger the vertices.
 
 \begin{RPGSkillTree}
+
+    \RPGSkillTreeStyle{vertex={draw=RPGColorTitle}, edge={draw=RPGColorTitle}}
 
     \begin{RPGTable}[title=Blade Dancer Path]{c c l X}
         && Talent & Benefit \\
@@ -44,6 +46,8 @@ One-line table rows are usually too small to draw an edge between, so it is usua
 \end{RPGSkillTree}
 
 \begin{RPGSkillTree}
+
+    \RPGSkillTreeStyle{vertex={draw=RPGColorForest}, edge={draw=RPGColorForest}}
 
     \begin{RPGTable}[title=Arcane Warden Path, header-row=false, color=RPGColorMoss]{c c l X}
         \RPGSTVertex{ward} && Warding Sigil & Gain temporary hit points when you cast an abjuration spell. \\
