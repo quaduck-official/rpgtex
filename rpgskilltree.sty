@@ -1,0 +1,90 @@
+% rpgskilltree.sty -- overlay digraphs on other environments for skill progression
+% Version: 2026/06/30 v0.5
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rpgskilltree}[2026/06/30 v0.5]
+
+\RequirePackage{xparse}
+\RequirePackage{tikz}
+\usetikzlibrary{tikzmark,arrows.meta}
+
+% Public TikZ styles. Override or extend in the document with, for example:
+%   \tikzset{rpgst/edge/.append style={thin}}
+\tikzset
+{%
+    rpgst/vertex/.style={
+        inner sep=1pt,
+        outer sep=0pt
+    },
+    rpgst/edge/.style={
+        ->,
+        >=Stealth,
+        shorten >=1pt,
+        shorten <=1pt
+    }
+}
+
+\newcounter{rpgskilltree}
+\newcommand{\RPGST@prefix}{}
+\newcommand{\RPGST@storededges}{}
+
+\newcommand{\RPGST@reset}
+{%
+    \stepcounter{rpgskilltree}%
+    \edef\RPGST@prefix{rpgst-\arabic{rpgskilltree}-}%
+    \global\let\RPGST@storededges\@empty
+    \global\let\RPGST@storedrows\@empty
+}
+
+% Mark a vertex.
+% Usage:
+%   \RPGSTVertex{name}
+%   \RPGSTVertex[$\bullet$]{name}
+\NewDocumentCommand{\RPGSTVertex}{O{$\bullet$}m}
+{%
+  \tikzmarknode[rpgst/vertex]{\RPGST@prefix#2}{#1}%
+}
+
+% Store edge commands inside the macro, but execute them only after the
+% environment closes
+% Usage:
+%   \RPGSkillTreeEdges{<\RPGSTEdge{a}{b}...>}
+\NewDocumentCommand{\RPGSkillTreeEdges}{+m}
+{%
+    \gdef\RPGST@storededges{#1}%
+}
+
+% Draw an edge between two named vertices. Anchor suffixes are allowed:
+%   \RPGSTEdge{a.east}{b.west}
+% The optional argument is passed to TikZ to[...]:
+%   \RPGSTEdge[bend left=20]{a}{b}
+%   \RPGSTEdge[out=0,in=180]{a.east}{b.west}
+\NewDocumentCommand{\RPGSTEdge}{O{}mm}
+{%
+  \draw[rpgst/edge] (\RPGST@prefix#2) to[#1] (\RPGST@prefix#3);%
+}
+
+% Reference the automatically-prefixed TikZ node name in custom paths.
+% Usage inside \RPGSkillTreeEdges:
+%   \RPGSTDraw{\draw[rpgst/edge] (\RPGSTRef{a}.east) -| (\RPGSTRef{b}.north);}
+\NewDocumentCommand{\RPGSTRef}{m}
+{%
+    \RPGST@prefix#1%
+}
+
+% Raw TikZ escape hatch for custom routing.
+\NewDocumentCommand{\RPGSTDraw}{+m}
+{%
+    #1%
+}
+
+% Environment:
+\NewDocumentEnvironment{RPGSkillTree}{}
+{%
+    \RPGST@reset%
+}
+{%
+    \begin{tikzpicture}[remember picture, overlay]
+        \RPGST@storededges
+    \end{tikzpicture}%
+}
