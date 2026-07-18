@@ -32,6 +32,7 @@ The bundle accepts explicit key/value options only. Shortcut options such as `tw
 | `rpgcolor` | Color schemes and themes |
 | `rpgfont`  | Font families, colors, and styles |
 | `rpglayout`  | Page layout and geometry |
+| `rpgsection` | Explicit RPG-styled sectioning commands |
 | `rpgtable`  | Tables with headers and alternating colors |
 | `rpgskilltree` | Overlaid skill progression graphs |
 
@@ -109,11 +110,60 @@ Defines a few font families and styles (`RPGFontFamilySerif`, `RPGFontStyleEmpha
 ]{rpglayout}
 ```
 
-Modifies a large number of layout and sectioning lengths and behaviors for the document. `justification` is also accepted as an alias for `alignment`, and `column` as an alias for `columns`. Shortcut options are also available: `ragged`, `raggedright`, `justified`, `onecolumn`, and `twocolumn`.
+Sets page geometry, paragraph spacing, list spacing, and optional column mode. `justification` is also accepted as an alias for `alignment`, and `column` as an alias for `columns`. Shortcut options are also available: `ragged`, `raggedright`, `justified`, `onecolumn`, and `twocolumn`.
 
 **RPG Dependencies**
  - `rpgcolor`
  - `rpgfont`
+
+
+### `rpgsection`
+
+```latex
+\usepackage{rpgsection}
+
+\RPGSectionSet{
+    chapter = { style = ruled, numbering = Arabic },
+    section = { style = ruled },
+    subsection = { style = ruled, numbering = arabic },
+}
+```
+
+```latex
+\RPGChapter{Chapter Title}
+\RPGSection{Section Title}
+\RPGSubsection[plain, numbering=none]{Subsection Title}
+```
+
+Provides explicit RPG-styled sectioning commands without redefining standard LaTeX commands such as `\chapter` or `\section`. This keeps package use opt-in: documents can mix ordinary LaTeX sectioning with RPG-styled headings, while future RPG document classes can decide whether to map the standard commands onto these variants.
+
+**RPG Dependencies**
+ - `rpgcolor`
+ - `rpgfont`
+
+**User API**:
+ - `\RPGPart[<options>]{<title>}` creates an RPG-styled part heading.
+ - `\RPGChapter[<options>]{<title>}` creates an RPG-styled chapter heading.
+ - `\RPGSection[<options>]{<title>}` creates an RPG-styled section heading.
+ - `\RPGSubsection[<options>]{<title>}` creates an RPG-styled subsection heading.
+ - `\RPGSubsubsection[<options>]{<title>}` creates an RPG-styled subsubsection heading.
+ - `\RPGParagraph[<options>]{<title>}` creates an RPG-styled run-in paragraph heading.
+ - `\RPGSubparagraph[<options>]{<title>}` creates an RPG-styled run-in subparagraph heading.
+ - `\RPGSectionSet{<level>={<options>}, ...}` sets document-wide defaults for one or more heading levels.
+
+**Options**:
+ - `style=<plain|ruled>` chooses whether display headings receive a horizontal rule below the title. Bare `plain` and `ruled` are accepted as shortcuts, so `\RPGSection[ruled]{Title}` is equivalent to `\RPGSection[style=ruled]{Title}`.
+ - `numbering=<none|arabic|Arabic|roman|Roman|alph|Alph>` controls whether and how the heading counter is stepped and printed. The default is `none`.
+ - `font=<commands>` overrides the font commands for a heading.
+ - `label=<commands>` overrides the printed label used when numbering is enabled.
+ - `before-skip=<length>` or `before=<length>` controls vertical space before a heading.
+ - `after-skip=<length>` or `after=<length>` controls vertical space after a heading.
+ - `toc=<true|false>` controls whether the heading is added to the table of contents.
+
+**Default Styling**:
+ - `\RPGSectionSet` uses nested per-level options: `part`, `chapter`, `section`, `subsection`, `subsubsection`, `paragraph`, and `subparagraph`.
+ - Per-heading options override defaults for that heading only.
+ - Flat legacy keys such as `section-font` and `chapter-after-skip` are still accepted, but the nested form is preferred.
 
 
 ### `rpgtable`
