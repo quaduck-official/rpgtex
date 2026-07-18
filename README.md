@@ -43,7 +43,7 @@ The bundle accepts explicit key/value options only. Shortcut options such as `tw
 \usepackage[<themename>]{rpgcolor}
 ```
 
-Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrimson`, etc) as well as semantic wrappers for different styling concepts used by other RPG modules (`RPGColorTitle`, `RPGColorStatBlock`, etc). These can be set to different color values independently or in batches using named themes.
+Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrimson`, etc) as well as semantic wrappers for styling concepts used by other RPG modules (`RPGColorHeader`, `RPGColorPanelBackground`, etc). These can be set to different color values independently or in batches using named themes.
 
 **RPG Dependencies**
  - None
@@ -56,33 +56,32 @@ Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrim
 **Semantic Wrapper Values**
 | Key | `RPGColorName` |
 |---|---|
-| base      | `RPGColorBase` |
-| comment   | `RPGColorComment` |
-| sidebar   | `RPGColorSidebar` |
-| tablerow  | `RPGColorTableRow` |
-| narration | `RPGColorNarration` |
-| title     | `RPGColorTitle` |
-| hrule     | `RPGColorHRule` |
-| statblock | `RPGColorStatBlock` |
-| ribbon    | `RPGColorRibbon` |
-| contour   | `RPGColorContour` |
-| footer    | `RPGColorFooter` |
+| background | `RPGColorBackground` |
+| accent | `RPGColorAccent` |
+| body | `RPGColorBody` |
+| muted | `RPGColorMuted` |
+| header | `RPGColorHeader` |
+| footer | `RPGColorFooter` |
+| panel-background | `RPGColorPanelBackground` |
+| panel-accent | `RPGColorPanelAccent` |
+| table-row | `RPGColorTableRow` |
+| contour | `RPGColorContour` |
 
 **Predefined Colors**
  - Please see `rpgcolor.sty` for a list of all defined colors.
 
 **Predefined Themes**
- - *default*: Bone and parchment with umber titles, forest rules, and rust accents.
- - *PHB2014*: Light green PHB trim with tan backgrounds, red titles, and gold accents.
- - *DMG2014*: Lavender DMG trim with tan backgrounds, red titles, and gold accents.
- - *arcane*: Lavender and wisteria with aubergine titles and amethyst rules.
- - *feywild*: Olive and lavender with forest titles and moss accents.
- - *maritime*: Mist and seafoam with midnight titles and deep teal ribbons.
- - *gothic*: Bone and mushroom with nightshade titles and blood-red ribbons.
- - *infernal*: Mauve and coral with blood-red titles and copper highlights.
- - *underdark*: Moonstone and slate with ink titles and nightshade ribbons.
- - *druidic*: Olive and celadon with forest titles and verdigris rules.
- - *desert*: Vellum and parchment with umber titles and gold ribbons.
+ - *default*: Bone panels with umber headers, forest footers, and rust accents.
+ - *PHB2014*: Light green panels with red headers, bronze footers, and gold accents.
+ - *DMG2014*: Lavender panels with red headers, bronze footers, and gold accents.
+ - *arcane*: Wisteria panels with aubergine headers and brass accents.
+ - *feywild*: Olive panels with forest headers and brass accents.
+ - *maritime*: Mist panels with midnight headers and deep teal accents.
+ - *gothic*: Bone panels with nightshade headers and blood-red accents.
+ - *infernal*: Mauve panels with blood-red headers and rust accents.
+ - *underdark*: Moonstone panels with ink headers and nightshade accents.
+ - *druidic*: Olive panels with forest headers and umber accents.
+ - *desert*: Vellum panels with umber headers and gold accents.
 
 ### `rpgfont`
 
@@ -204,7 +203,7 @@ Provides a `tabularx` wrapper that alternates row color. Inherits default row co
 
 ```latex
 \usepackage{rpgskilltree}
-\RPGSkillTreeStyle{vertex={draw=RPGColorTitle}, edge={draw=RPGColorTitle}}
+\RPGSkillTreeStyle{vertex={draw=RPGColorHeader}, edge={draw=RPGColorHeader}}
 ```
 
 ```latex
