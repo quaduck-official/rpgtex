@@ -33,13 +33,11 @@
 %--------------------------------------------------------------------------------------
 %   GLOBALS
 
-\tl_new:N   \g__rpg_table_default_color_tl
 \str_new:N  \g__rpg_table_default_striped_str
 \tl_new:N   \g__rpg_table_default_title_tl
 \tl_new:N   \g__rpg_table_default_width_tl
 \bool_new:N \g__rpg_table_default_header_row_bool
 
-\tl_gset:Nn       \g__rpg_table_default_color_tl {RPGColorTableRow}
 \str_gset:Nn      \g__rpg_table_default_striped_str {odd}
 \tl_gclear:N      \g__rpg_table_default_title_tl
 \tl_gset:Nn       \g__rpg_table_default_width_tl {\linewidth}
@@ -89,9 +87,6 @@
 
 \keys_define:nn {rpg / table / defaults}
 {
-    color .tl_gset:N = \g__rpg_table_default_color_tl,
-    color .value_required:n = true,
-
     striped .choice:,
     striped / odd .code:n =
       { \str_gset:Nn \g__rpg_table_default_striped_str {odd} },
@@ -146,7 +141,7 @@
 % -----------------------------------------------------------------------------
 \cs_new_protected:Npn \__rpg_table_set_defaults:
 {
-    \tl_set_eq:NN \l__rpg_table_color_tl \g__rpg_table_default_color_tl
+    \tl_set:Nn \l__rpg_table_color_tl { RPGColorTableRow }
 
     \str_set_eq:NN \l__rpg_table_striped_str \g__rpg_table_default_striped_str
 
