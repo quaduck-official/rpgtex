@@ -111,7 +111,7 @@
 
 \cs_new_protected:Npn \__rpg_panel_style_plain:
 {
-    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorBase }
+    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorPanelBackground }
     \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontBody }
     \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontBody }
     \tl_set:Nn \l__rpg_panel_line_spread_tl { 1 }
@@ -120,7 +120,7 @@
 
 \cs_new_protected:Npn \__rpg_panel_style_comment:
 {
-    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorComment }
+    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorPanelBackground }
     \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontCommentTitle }
     \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontCommentBody }
     \tl_set:Nn \l__rpg_panel_line_spread_tl { .9 }
@@ -132,13 +132,13 @@
         right = 6pt,
         top = 0pt,
         bottom = 2pt,
-        coltitle = black,
+        coltitle = RPGColorBody,
     }
 }
 
 \cs_new_protected:Npn \__rpg_panel_style_sidebar:
 {
-    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorSidebar }
+    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorPanelBackground }
     \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontSidebarTitle }
     \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontSidebarBody }
     \tl_set:Nn \l__rpg_panel_line_spread_tl { .9 }
@@ -150,23 +150,23 @@
         right = 6pt,
         top = 0pt,
         bottom = 2pt,
-        coltitle = black,
-        borderline~north = {1pt} {-0.5pt} {black},
-        borderline~south = {1pt} {-0.5pt} {black},
-        fuzzy~shadow = {0mm} {-3.5pt} {-0.5pt} {0.4mm} {black!60!white},
+        coltitle = RPGColorBody,
+        borderline~north = {1pt} {-0.5pt} {RPGColorPanelAccent},
+        borderline~south = {1pt} {-0.5pt} {RPGColorPanelAccent},
+        fuzzy~shadow = {0mm} {-3.5pt} {-0.5pt} {0.4mm} {RPGColorPanelAccent!60!white},
         overlay =
         {
-            \fill [black] ( frame.south~west ) -- ++ (  7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
-            \fill [black] ( frame.north~west ) -- ++ (  7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
-            \fill [black] ( frame.north~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
-            \fill [black] ( frame.south~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
+            \fill [RPGColorPanelAccent] ( frame.south~west ) -- ++ (  7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
+            \fill [RPGColorPanelAccent] ( frame.north~west ) -- ++ (  7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
+            \fill [RPGColorPanelAccent] ( frame.north~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
+            \fill [RPGColorPanelAccent] ( frame.south~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
         },
     }
 }
 
 \cs_new_protected:Npn \__rpg_panel_style_narration:
 {
-    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorNarration }
+    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorPanelBackground }
     \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontReadAloud }
     \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontReadAloud }
     \tl_set:Nn \l__rpg_panel_line_spread_tl { 1.1 }
@@ -178,12 +178,12 @@
         left = 0pt,
         right = 0pt,
         bottom = 0pt,
-        borderline~west = {1pt} {-0.5pt} {RPGColorTitle},
-        borderline~east = {1pt} {-0.5pt} {RPGColorTitle},
+        borderline~west = {1pt} {-0.5pt} {RPGColorPanelAccent},
+        borderline~east = {1pt} {-0.5pt} {RPGColorPanelAccent},
         overlay =
         {
             \foreach \n in { north~east, north~west, south~east, south~west }
-            { \draw [ RPGColorTitle, fill = RPGColorTitle ] ( frame.\n ) circle (1.5pt); }
+            { \draw [ RPGColorPanelAccent, fill = RPGColorPanelAccent ] ( frame.\n ) circle (1.5pt); }
         },
     }
 }

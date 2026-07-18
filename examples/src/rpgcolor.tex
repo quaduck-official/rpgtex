@@ -17,17 +17,16 @@
 \definecolor{MyCoolColor}{HTML}{DADB0D} % RPGColor already loads xcolor
 \RPGColorThemeCreate{custom}
 {%
-    base      = MyCoolColor, % You can use custom colors
-    comment   = RPGColorLavender,
-    sidebar   = RPGColorCeladon,
-    tablerow  = RPGColorOlive,
-    narration = RPGColorCoral,
-    title     = RPGColorAubergine,
-    hrule     = RPGColorDeepTeal,
-    statblock = RPGColorFrost,
-    ribbon    = RPGColorAmber,
-    contour   = RPGColorAsh,
-    footer    = RPGColorOxblood,
+    background       = RPGColorFrost,
+    accent           = RPGColorAmber,
+    body             = RPGColorInk,
+    muted            = RPGColorCharcoal,
+    header           = RPGColorAubergine,
+    footer           = RPGColorOxblood,
+    panel-background = MyCoolColor, % You can use custom colors
+    panel-accent     = RPGColorDeepTeal,
+    table-row        = RPGColorOlive,
+    contour          = RPGColorAsh,
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -51,17 +50,16 @@
         \hline
         Color control sequence & Color \\
         \hline
-        \ColorRow{RPGColorBase}
-        \ColorRow{RPGColorComment}
-        \ColorRow{RPGColorSidebar}
-        \ColorRow{RPGColorTableRow}
-        \ColorRow{RPGColorNarration}
-        \ColorRow{RPGColorTitle}
-        \ColorRow{RPGColorHRule}
-        \ColorRow{RPGColorStatBlock}
-        \ColorRow{RPGColorRibbon}
-        \ColorRow{RPGColorContour}
+        \ColorRow{RPGColorBackground}
+        \ColorRow{RPGColorAccent}
+        \ColorRow{RPGColorBody}
+        \ColorRow{RPGColorMuted}
+        \ColorRow{RPGColorHeader}
         \ColorRow{RPGColorFooter}
+        \ColorRow{RPGColorPanelBackground}
+        \ColorRow{RPGColorPanelAccent}
+        \ColorRow{RPGColorTableRow}
+        \ColorRow{RPGColorContour}
         \hline
     \end{tabular}
 }
@@ -88,26 +86,25 @@ Each table switches theme with the \texttt{\char`\\RPGColorThemeApply} command a
 Use \texttt{\char`\\RPGColorSet} with \texttt{key=value,...} when you want to change one or more live semantic colors without changing the saved theme definition.
 
 \RPGColorThemeApply{default}%
-\RPGColorSet{title=RPGColorForest,footer=RPGColorInk,ribbon=MyCoolColor}%
+\RPGColorSet{header=RPGColorForest,footer=RPGColorInk,accent=MyCoolColor}%
 
-This table starts from \texttt{default}, then changes only \texttt{title}, \texttt{footer}, and \texttt{ribbon} with \texttt{\char`\\RPGColorSet}.
+This table starts from \texttt{default}, then changes only \texttt{header}, \texttt{footer}, and \texttt{accent} with \texttt{\char`\\RPGColorSet}.
 The saved theme is unchanged; applying it again restores the original values.
 
 \begin{tabular}{|l|l|}
     \hline
     Color control sequence & Color \\
     \hline
-    \ColorRow{RPGColorBase}
-    \ColorRow{RPGColorComment}
-    \ColorRow{RPGColorSidebar}
-    \ColorRow{RPGColorTableRow}
-    \ColorRow{RPGColorNarration}
-    \ColorRow{RPGColorTitle}
-    \ColorRow{RPGColorHRule}
-    \ColorRow{RPGColorStatBlock}
-    \ColorRow{RPGColorRibbon}
-    \ColorRow{RPGColorContour}
+    \ColorRow{RPGColorBackground}
+    \ColorRow{RPGColorAccent}
+    \ColorRow{RPGColorBody}
+    \ColorRow{RPGColorMuted}
+    \ColorRow{RPGColorHeader}
     \ColorRow{RPGColorFooter}
+    \ColorRow{RPGColorPanelBackground}
+    \ColorRow{RPGColorPanelAccent}
+    \ColorRow{RPGColorTableRow}
+    \ColorRow{RPGColorContour}
     \hline
 \end{tabular}
 
