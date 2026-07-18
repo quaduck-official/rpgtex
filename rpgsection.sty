@@ -29,6 +29,7 @@
 \tl_new:N \l__rpg_section_subheading_tl
 \tl_new:N \l__rpg_section_default_level_tl
 \tl_new:N \l__rpg_section_numbering_tl
+\bool_new:N \l__rpg_section_contour_bool
 \bool_new:N \l__rpg_section_toc_bool
 
 \prop_new:N \g__rpg_section_defaults_prop
@@ -49,7 +50,7 @@
 \prop_gput:Nnn \g__rpg_section_defaults_prop { part / font }
     { \centering \RPGFontPart }
 \prop_gput:Nnn \g__rpg_section_defaults_prop { part / label }
-    { \RPGFontContour { \partname\ \__rpg_section_number: } }
+    { \partname\ \__rpg_section_number: }
 \prop_gput:Nnn \g__rpg_section_defaults_prop { part / before }
     { 0pt }
 \prop_gput:Nnn \g__rpg_section_defaults_prop { part / after }
@@ -58,7 +59,7 @@
 \prop_gput:Nnn \g__rpg_section_defaults_prop { chapter / font }
     { \RPGFontChapter }
 \prop_gput:Nnn \g__rpg_section_defaults_prop { chapter / label }
-    { \RPGFontContour { \chaptername\ \__rpg_section_number: : } }
+    { \chaptername\ \__rpg_section_number: : }
 \prop_gput:Nnn \g__rpg_section_defaults_prop { chapter / before }
     { .3ex }
 \prop_gput:Nnn \g__rpg_section_defaults_prop { chapter / after }
@@ -114,6 +115,7 @@
 {
     \prop_gput:Nnn \g__rpg_section_defaults_prop { #1 / style } { plain }
     \prop_gput:Nnn \g__rpg_section_defaults_prop { #1 / numbering } { none }
+    \prop_gput:Nnn \g__rpg_section_defaults_prop { #1 / contour } { false }
 }
 
 
@@ -189,6 +191,13 @@
         { \__rpg_section_default_put:nn { numbering } { alph } },
     numbering / Alph .code:n =
         { \__rpg_section_default_put:nn { numbering } { Alph } },
+
+    contour .choice:,
+    contour / true .code:n =
+        { \__rpg_section_default_put:nn { contour } { true } },
+    contour / false .code:n =
+        { \__rpg_section_default_put:nn { contour } { false } },
+    contour .default:n = true,
 }
 
 \keys_define:nn { rpg / section / style }
@@ -239,6 +248,9 @@
     numbering / Alph .code:n =
         { \tl_set:Nn \l__rpg_section_numbering_tl { Alph } },
 
+    contour .bool_set:N = \l__rpg_section_contour_bool,
+    contour .default:n = true,
+
     toc .bool_set:N = \l__rpg_section_toc_bool,
 }
 
@@ -282,6 +294,20 @@
     }
 }
 
+\cs_new_protected:Npn \__rpg_section_if_twocolumn:TF #1#2
+{
+    \cs:w if@twocolumn \cs_end:
+        #1
+    \else:
+        #2
+    \fi:
+}
+
+\cs_new_protected:Npn \__rpg_section_topnewpage:n #1
+{
+    \use:c { @topnewpage } [ #1 ]
+}
+
 \cs_new_protected:Npn \__rpg_section_defaults_apply:n #1
 {
     \prop_get:NnN \g__rpg_section_defaults_prop { #1 / font } \l__rpg_section_font_tl
@@ -291,6 +317,13 @@
     \prop_get:NnN \g__rpg_section_defaults_prop { #1 / style } \l__rpg_section_heading_style_tl
     \tl_set:Nn \l__rpg_section_level_tl { #1 }
     \prop_get:NnN \g__rpg_section_defaults_prop { #1 / numbering } \l__rpg_section_numbering_tl
+    \prop_get:NnNTF \g__rpg_section_defaults_prop { #1 / contour } \l_tmpa_tl
+        {
+            \str_if_eq:VnTF \l_tmpa_tl { true }
+                { \bool_set_true:N \l__rpg_section_contour_bool }
+                { \bool_set_false:N \l__rpg_section_contour_bool }
+        }
+        { \bool_set_false:N \l__rpg_section_contour_bool }
     \bool_set_true:N \l__rpg_section_toc_bool
 }
 
@@ -311,6 +344,15 @@
         \tl_if_blank:VTF \l__rpg_section_label_tl
             { }
             { \l__rpg_section_label_tl #1 }
+    }
+}
+
+\cs_new_protected:Npn \__rpg_section_label_display_contoured:n #1
+{
+    \str_if_eq:VnF \l__rpg_section_numbering_tl { none }
+    {
+        \tl_if_blank:VF \l__rpg_section_label_tl
+            { \exp_args:NV \RPGFontContour \l__rpg_section_label_tl #1 }
     }
 }
 
@@ -336,8 +378,15 @@
         \group_end:
     }
     {
-        \__rpg_section_label_display:n { \space }
-        \RPGFontContour { \l__rpg_section_title_tl }
+        \bool_if:NTF \l__rpg_section_contour_bool
+        {
+            \__rpg_section_label_display_contoured:n { \space }
+            \exp_args:NV \RPGFontContour \l__rpg_section_title_tl
+        }
+        {
+            \__rpg_section_label_display:n { \space }
+            \tl_use:N \l__rpg_section_title_tl
+        }
     }
 }
 
@@ -415,6 +464,19 @@
     }
 }
 
+\cs_new_protected:Npn \__rpg_section_display_block:n #1
+{
+    \par \addvspace { \l__rpg_section_before_tl }
+    \noindent
+    { \l__rpg_section_font_tl
+        \__rpg_section_title_display:
+    }
+    \par \nobreak
+    \__rpg_section_subheading_display:n { #1 }
+    \__rpg_section_style_apply:
+    \vspace { \l__rpg_section_after_tl }
+}
+
 \cs_new_protected:Npn \__rpg_section_display:nnnn #1#2#3#4
 {
     \group_begin:
@@ -423,15 +485,13 @@
         \tl_set:Nn \l__rpg_section_title_tl { #3 }
         \__rpg_section_counter_step:n { #1 }
         \__rpg_section_toc_add:nn { #1 } { #3 }
-        \par \addvspace { \l__rpg_section_before_tl }
-        \noindent
-        { \l__rpg_section_font_tl
-            \__rpg_section_title_display:
+        \str_if_eq:nnTF { #1 } { chapter }
+        {
+            \__rpg_section_if_twocolumn:TF
+                { \__rpg_section_topnewpage:n { \__rpg_section_display_block:n { #4 } } }
+                { \__rpg_section_display_block:n { #4 } }
         }
-        \par \nobreak
-        \__rpg_section_subheading_display:n { #4 }
-        \__rpg_section_style_apply:
-        \vspace { \l__rpg_section_after_tl }
+        { \__rpg_section_display_block:n { #4 } }
     \group_end:
     \ignorespaces
 }
@@ -466,37 +526,58 @@
     \keys_set:nn { rpg / section / defaults } { #1 }
 }
 
-\NewDocumentCommand { \RPGPart } { O{} m o }
+\cs_if_exist:cT { c@part }
 {
-    \__rpg_section_display:nnnn { part } { #1 } { #2 } { #3 }
+    \NewDocumentCommand { \RPGPart } { O{} m o }
+    {
+        \__rpg_section_display:nnnn { part } { #1 } { #2 } { #3 }
+    }
 }
 
-\NewDocumentCommand { \RPGChapter } { O{} m o }
+\cs_if_exist:cT { c@chapter }
 {
-    \__rpg_section_display:nnnn { chapter } { #1 } { #2 } { #3 }
+    \NewDocumentCommand { \RPGChapter } { O{} m o }
+    {
+        \__rpg_section_display:nnnn { chapter } { #1 } { #2 } { #3 }
+    }
 }
 
-\NewDocumentCommand { \RPGSection } { O{} m o }
+\cs_if_exist:cT { c@section }
 {
-    \__rpg_section_display:nnnn { section } { #1 } { #2 } { #3 }
+    \NewDocumentCommand { \RPGSection } { O{} m o }
+    {
+        \__rpg_section_display:nnnn { section } { #1 } { #2 } { #3 }
+    }
 }
 
-\NewDocumentCommand { \RPGSubsection } { O{} m o }
+\cs_if_exist:cT { c@subsection }
 {
-    \__rpg_section_display:nnnn { subsection } { #1 } { #2 } { #3 }
+    \NewDocumentCommand { \RPGSubsection } { O{} m o }
+    {
+        \__rpg_section_display:nnnn { subsection } { #1 } { #2 } { #3 }
+    }
 }
 
-\NewDocumentCommand { \RPGSubsubsection } { O{} m o }
+\cs_if_exist:cT { c@subsubsection }
 {
-    \__rpg_section_display:nnnn { subsubsection } { #1 } { #2 } { #3 }
+    \NewDocumentCommand { \RPGSubsubsection } { O{} m o }
+    {
+        \__rpg_section_display:nnnn { subsubsection } { #1 } { #2 } { #3 }
+    }
 }
 
-\NewDocumentCommand { \RPGParagraph } { O{} m o }
+\cs_if_exist:cT { c@paragraph }
 {
-    \__rpg_section_runin:nnnn { paragraph } { #1 } { #2 } { #3 }
+    \NewDocumentCommand { \RPGParagraph } { O{} m o }
+    {
+        \__rpg_section_runin:nnnn { paragraph } { #1 } { #2 } { #3 }
+    }
 }
 
-\NewDocumentCommand { \RPGSubparagraph } { O{} m o }
+\cs_if_exist:cT { c@subparagraph }
 {
-    \__rpg_section_runin:nnnn { subparagraph } { #1 } { #2 } { #3 }
+    \NewDocumentCommand { \RPGSubparagraph } { O{} m o }
+    {
+        \__rpg_section_runin:nnnn { subparagraph } { #1 } { #2 } { #3 }
+    }
 }
