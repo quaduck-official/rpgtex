@@ -123,7 +123,7 @@ Sets page geometry, paragraph spacing, list spacing, and optional column mode. `
 
 \RPGSectionSet{
     chapter = { style = ruled, numbering = Arabic },
-    section = { style = ruled },
+    section = { style = banner },
     subsection = { style = ruled, numbering = arabic },
 }
 ```
@@ -151,7 +151,7 @@ Provides explicit RPG-styled sectioning commands without redefining standard LaT
  - `\RPGSectionSet{<level>={<options>}, ...}` sets document-wide defaults for one or more heading levels.
 
 **Options**:
- - `style=<plain|ruled>` chooses whether display headings receive a horizontal rule below the title. Bare `plain` and `ruled` are accepted as shortcuts, so `\RPGSection[ruled]{Title}` is equivalent to `\RPGSection[style=ruled]{Title}`.
+ - `style=<plain|ruled|banner>` chooses the heading treatment. `plain` prints the heading text only, `ruled` adds a horizontal rule below display headings, and `banner` centers the heading text in a full-width `RPGColorHeader` colorbox with `RPGColorBackground` text. Bare `plain`, `ruled`, and `banner` are accepted as shortcuts, so `\RPGSection[banner]{Title}` is equivalent to `\RPGSection[style=banner]{Title}`.
  - `numbering=<none|arabic|Arabic|roman|Roman|alph|Alph>` controls whether and how the heading counter is stepped and printed. The default is `none`.
  - `font=<commands>` overrides the font commands for a heading.
  - `label=<commands>` overrides the printed label used when numbering is enabled.
@@ -166,7 +166,7 @@ Provides explicit RPG-styled sectioning commands without redefining standard LaT
 **Default Styling**:
  - `\RPGSectionSet` uses nested per-level options: `part`, `chapter`, `section`, `subsection`, `subsubsection`, `paragraph`, and `subparagraph`.
  - Per-heading options override defaults for that heading only.
- - Flat legacy keys such as `section-font` and `chapter-after-skip` are still accepted, but the nested form is preferred.
+ - Flat per-level keys such as `section-font` and `chapter-after-skip` are not supported; use nested keys instead.
 
 
 ### `rpgtable`
