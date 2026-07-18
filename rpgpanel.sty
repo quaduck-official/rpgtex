@@ -34,13 +34,9 @@
 %--------------------------------------------------------------------------------------
 %   GLOBALS
 
-\tl_new:N   \g__rpg_panel_default_accent_tl
-\tl_new:N   \g__rpg_panel_default_background_tl
 \bool_new:N \g__rpg_panel_default_floating_bool
 \str_new:N  \g__rpg_panel_default_style_str
 
-\tl_gset:Nn        \g__rpg_panel_default_accent_tl { RPGColorPanelAccent }
-\tl_gset:Nn        \g__rpg_panel_default_background_tl { RPGColorPanelBackground }
 \bool_gset_false:N \g__rpg_panel_default_floating_bool
 \str_gset:Nn       \g__rpg_panel_default_style_str { none }
 
@@ -72,15 +68,6 @@
 
 \keys_define:nn { rpg / panel / defaults }
 {
-    accent .tl_gset:N = \g__rpg_panel_default_accent_tl,
-    accent .value_required:n = true,
-
-    background .tl_gset:N = \g__rpg_panel_default_background_tl,
-    background .value_required:n = true,
-
-    color .meta:n = { background = #1 },
-    color .value_required:n = true,
-
     floating .bool_gset:N = \g__rpg_panel_default_floating_bool,
     floating .default:n = true,
 
@@ -214,8 +201,8 @@
 
 \cs_new_protected:Npn \__rpg_panel_set_defaults:
 {
-    \tl_set_eq:NN \l__rpg_panel_accent_tl \g__rpg_panel_default_accent_tl
-    \tl_set_eq:NN \l__rpg_panel_background_tl \g__rpg_panel_default_background_tl
+    \tl_set:Nn \l__rpg_panel_accent_tl { RPGColorPanelAccent }
+    \tl_set:Nn \l__rpg_panel_background_tl { RPGColorPanelBackground }
     \bool_set_eq:NN \l__rpg_panel_floating_bool \g__rpg_panel_default_floating_bool
     \str_set_eq:NN \l__rpg_panel_style_str \g__rpg_panel_default_style_str
     \tl_clear:N \l__rpg_panel_title_tl
@@ -299,8 +286,9 @@
 }
 
 % Options are split between rpg/panel keys and raw tcolorbox keys. Supported panel keys
-% include accent=<color>, background=<color>, floating=<bool>, style=none|ribbon|bars,
-% title=<text>, title-font=<commands>, body-font=<commands>, and line-spread=<factor>.
+% include one-off accent=<color> and background=<color> overrides, floating=<bool>,
+% style=none|ribbon|bars, title=<text>, title-font=<commands>, body-font=<commands>,
+% and line-spread=<factor>.
 \NewDocumentEnvironment { RPGPanel } { O{} +b }
 {
     \__rpg_panel_render:nn {#1} {#2}
