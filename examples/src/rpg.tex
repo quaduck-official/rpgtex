@@ -24,6 +24,37 @@ The road follows a cold river through pine woods.  The \texttt{rpg} package load
 
 \lipsum[1]
 
+\section{Panels}
+
+\begin{RPGPanel}[title={Read-Aloud Text}, style=bars]
+    Read or paraphrase this when the party reaches the tower: pale witchlight
+    burns behind the arrow slits, and the old stones hum softly in the rain.
+\end{RPGPanel}
+
+\begin{RPGPanel}[title={Referee Note}, style=ribbon]
+    The ribbon style is useful for side notes, advice, and rules commentary.
+\end{RPGPanel}
+
+\begin{RPGPanel}[title={Plain Panel}, style=none]
+    The plain style keeps the same spacing, typography, and theme colors without
+    adding border decoration.
+\end{RPGPanel}
+
+\begin{RPGPanel}[
+    title={Local Panel Colors},
+    style=ribbon,
+    accent=RPGColorAubergine,
+    background=RPGColorWisteria,
+]
+    Individual panels can override the theme's panel accent and background.
+\end{RPGPanel}
+
+\RPGPanelSet{style=bars, accent=RPGColorHex}
+
+\begin{RPGPanel}[title={Panel Defaults}]
+    \texttt{\string\RPGPanelSet} changes the defaults for later panels.
+\end{RPGPanel}
+
 \subsection{Travel Notes}
 
 \begin{itemize}

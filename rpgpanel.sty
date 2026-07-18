@@ -32,9 +32,26 @@
 %   DATA
 
 %--------------------------------------------------------------------------------------
+%   GLOBALS
+
+\tl_new:N   \g__rpg_panel_default_accent_tl
+\tl_new:N   \g__rpg_panel_default_background_tl
+\bool_new:N \g__rpg_panel_default_floating_bool
+\str_new:N  \g__rpg_panel_default_style_str
+
+\tl_gset:Nn        \g__rpg_panel_default_accent_tl { RPGColorPanelAccent }
+\tl_gset:Nn        \g__rpg_panel_default_background_tl { RPGColorPanelBackground }
+\bool_gset_false:N \g__rpg_panel_default_floating_bool
+\str_gset:Nn       \g__rpg_panel_default_style_str { none }
+
+
+
+
+%--------------------------------------------------------------------------------------
 %   LOCALS
 
-\tl_new:N  \l__rpg_panel_color_tl
+\tl_new:N  \l__rpg_panel_accent_tl
+\tl_new:N  \l__rpg_panel_background_tl
 \tl_new:N  \l__rpg_panel_title_tl
 \tl_new:N  \l__rpg_panel_title_font_tl
 \tl_new:N  \l__rpg_panel_body_font_tl
@@ -42,7 +59,8 @@
 \tl_new:N  \l__rpg_panel_tcb_keys_tl
 \tl_new:N  \l__rpg_panel_box_keys_tl
 \bool_new:N \l__rpg_panel_title_bool
-
+\bool_new:N \l__rpg_panel_floating_bool
+\str_new:N  \l__rpg_panel_style_str
 
 
 
@@ -50,32 +68,60 @@
 %   OPTIONS
 
 %--------------------------------------------------------------------------------------
+%   GLOBAL DEFAULT KEYS
+
+\keys_define:nn { rpg / panel / defaults }
+{
+    accent .tl_gset:N = \g__rpg_panel_default_accent_tl,
+    accent .value_required:n = true,
+
+    background .tl_gset:N = \g__rpg_panel_default_background_tl,
+    background .value_required:n = true,
+
+    color .meta:n = { background = #1 },
+    color .value_required:n = true,
+
+    floating .bool_gset:N = \g__rpg_panel_default_floating_bool,
+    floating .default:n = true,
+
+    style .choice:,
+    style / none .code:n =
+        { \str_gset:Nn \g__rpg_panel_default_style_str { none } },
+    style / ribbon .code:n =
+        { \str_gset:Nn \g__rpg_panel_default_style_str { ribbon } },
+    style / bars .code:n =
+        { \str_gset:Nn \g__rpg_panel_default_style_str { bars } },
+    style .value_required:n = true,
+}
+\ProcessKeysOptions { rpg / panel / defaults }
+
+
+
+%--------------------------------------------------------------------------------------
 %   PANEL KEYS
 
 \keys_define:nn { rpg / panel }
 {
-    style .choice:,
-    style / plain .code:n =
-        { \__rpg_panel_style_plain: },
-    style / comment .code:n =
-        { \__rpg_panel_style_comment: },
-    style / sidebar .code:n =
-        { \__rpg_panel_style_sidebar: },
-    style / side-bar .code:n =
-        { \__rpg_panel_style_sidebar: },
-    style / narration .code:n =
-        { \__rpg_panel_style_narration: },
-    style / readaloud .code:n =
-        { \__rpg_panel_style_narration: },
-    style / read-aloud .code:n =
-        { \__rpg_panel_style_narration: },
-    style .value_required:n = true,
+    accent .tl_set:N = \l__rpg_panel_accent_tl,
+    accent .value_required:n = true,
 
-    variant .meta:n = { style = #1 },
-    variant .value_required:n = true,
+    background .tl_set:N = \l__rpg_panel_background_tl,
+    background .value_required:n = true,
 
-    color .tl_set:N = \l__rpg_panel_color_tl,
+    color .meta:n = { background = #1 },
     color .value_required:n = true,
+
+    floating .bool_set:N = \l__rpg_panel_floating_bool,
+    floating .default:n = true,
+
+    style .choice:,
+    style / none .code:n =
+        { \str_set:Nn \l__rpg_panel_style_str { none } },
+    style / ribbon .code:n =
+        { \str_set:Nn \l__rpg_panel_style_str { ribbon } },
+    style / bars .code:n =
+        { \str_set:Nn \l__rpg_panel_style_str { bars } },
+    style .value_required:n = true,
 
     title .code:n =
         {
@@ -109,82 +155,50 @@
 %--------------------------------------------------------------------------------------
 %   STYLES
 
-\cs_new_protected:Npn \__rpg_panel_style_plain:
+\cs_new_protected:Npn \__rpg_panel_style_none:
 {
-    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorPanelBackground }
-    \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontBody }
-    \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontBody }
-    \tl_set:Nn \l__rpg_panel_line_spread_tl { 1 }
     \tl_clear:N \l__rpg_panel_tcb_keys_tl
 }
 
-\cs_new_protected:Npn \__rpg_panel_style_comment:
+\cs_new_protected:Npn \__rpg_panel_style_ribbon:
 {
-    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorPanelBackground }
-    \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontCommentTitle }
-    \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontCommentBody }
-    \tl_set:Nn \l__rpg_panel_line_spread_tl { .9 }
     \tl_set:Nn \l__rpg_panel_tcb_keys_tl
     {
-        toptitle = 2pt,
-        boxsep = 3pt,
-        left = 6pt,
-        right = 6pt,
-        top = 0pt,
-        bottom = 2pt,
-        coltitle = RPGColorBody,
-    }
-}
-
-\cs_new_protected:Npn \__rpg_panel_style_sidebar:
-{
-    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorPanelBackground }
-    \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontSidebarTitle }
-    \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontSidebarBody }
-    \tl_set:Nn \l__rpg_panel_line_spread_tl { .9 }
-    \tl_set:Nn \l__rpg_panel_tcb_keys_tl
-    {
-        toptitle = 2pt,
-        boxsep = 3pt,
-        left = 6pt,
-        right = 6pt,
-        top = 0pt,
-        bottom = 2pt,
-        coltitle = RPGColorBody,
-        borderline~north = {1pt} {-0.5pt} {RPGColorPanelAccent},
-        borderline~south = {1pt} {-0.5pt} {RPGColorPanelAccent},
-        fuzzy~shadow = {0mm} {-3.5pt} {-0.5pt} {0.4mm} {RPGColorPanelAccent!60!white},
+        borderline~north = {1pt} {-0.5pt} {\l__rpg_panel_accent_tl},
+        borderline~south = {1pt} {-0.5pt} {\l__rpg_panel_accent_tl},
+        fuzzy~shadow = {0mm} {-3.5pt} {-0.5pt} {0.4mm} {\l__rpg_panel_accent_tl!60!white},
         overlay =
         {
-            \fill [RPGColorPanelAccent] ( frame.south~west ) -- ++ (  7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
-            \fill [RPGColorPanelAccent] ( frame.north~west ) -- ++ (  7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
-            \fill [RPGColorPanelAccent] ( frame.north~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
-            \fill [RPGColorPanelAccent] ( frame.south~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
+            \fill [\l__rpg_panel_accent_tl] ( frame.south~west ) -- ++ (  7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
+            \fill [\l__rpg_panel_accent_tl] ( frame.north~west ) -- ++ (  7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
+            \fill [\l__rpg_panel_accent_tl] ( frame.north~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
+            \fill [\l__rpg_panel_accent_tl] ( frame.south~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
         },
     }
 }
 
-\cs_new_protected:Npn \__rpg_panel_style_narration:
+\cs_new_protected:Npn \__rpg_panel_style_bars:
 {
-    \tl_set:Nn \l__rpg_panel_color_tl { RPGColorPanelBackground }
-    \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontReadAloud }
-    \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontReadAloud }
-    \tl_set:Nn \l__rpg_panel_line_spread_tl { 1.1 }
     \tl_set:Nn \l__rpg_panel_tcb_keys_tl
     {
         enhanced~jigsaw,
-        boxsep = 8pt,
-        top = 0pt,
-        left = 0pt,
-        right = 0pt,
-        bottom = 0pt,
-        borderline~west = {1pt} {-0.5pt} {RPGColorPanelAccent},
-        borderline~east = {1pt} {-0.5pt} {RPGColorPanelAccent},
+        borderline~west = {1pt} {-0.5pt} {\l__rpg_panel_accent_tl},
+        borderline~east = {1pt} {-0.5pt} {\l__rpg_panel_accent_tl},
         overlay =
         {
             \foreach \n in { north~east, north~west, south~east, south~west }
-            { \draw [ RPGColorPanelAccent, fill = RPGColorPanelAccent ] ( frame.\n ) circle (1.5pt); }
+            { \draw [ \l__rpg_panel_accent_tl, fill = \l__rpg_panel_accent_tl ] ( frame.\n ) circle (1.5pt); }
         },
+    }
+}
+
+\cs_new_protected:Npn \__rpg_panel_style_apply:
+{
+    \str_case:Vn \l__rpg_panel_style_str
+    {
+        { none }   { \__rpg_panel_style_none: }
+        { ribbon } { \__rpg_panel_style_ribbon: }
+        { bars }   { \__rpg_panel_style_bars: }
     }
 }
 
@@ -200,9 +214,16 @@
 
 \cs_new_protected:Npn \__rpg_panel_set_defaults:
 {
-    \__rpg_panel_style_plain:
+    \tl_set_eq:NN \l__rpg_panel_accent_tl \g__rpg_panel_default_accent_tl
+    \tl_set_eq:NN \l__rpg_panel_background_tl \g__rpg_panel_default_background_tl
+    \bool_set_eq:NN \l__rpg_panel_floating_bool \g__rpg_panel_default_floating_bool
+    \str_set_eq:NN \l__rpg_panel_style_str \g__rpg_panel_default_style_str
     \tl_clear:N \l__rpg_panel_title_tl
     \bool_set_false:N \l__rpg_panel_title_bool
+    \tl_set:Nn \l__rpg_panel_title_font_tl { \RPGFontPanelTitle }
+    \tl_set:Nn \l__rpg_panel_body_font_tl { \RPGFontPanelBody }
+    \tl_set:Nn \l__rpg_panel_line_spread_tl { 1 }
+    \tl_clear:N \l__rpg_panel_tcb_keys_tl
 }
 
 \cs_new_protected:Npn \__rpg_panel_render:nn #1#2
@@ -218,24 +239,36 @@
                 { \tl_clear:N \l_tmpa_tl }
         }
 
+        \__rpg_panel_style_apply:
+
         \tl_set:Nn \l__rpg_panel_box_keys_tl
         {
             frame~hidden,
             boxrule = 0pt,
-            breakable,
             enhanced,
             before~skip = 13pt plus 4pt minus 4pt,
             after~skip = 13pt plus 4pt minus 4pt,
             sharp~corners,
+            toptitle = 2pt,
+            boxsep = 3pt,
+            left = 6pt,
+            right = 6pt,
+            top = 0pt,
+            bottom = 2pt,
             parbox = false,
             before~upper = { },
             code = { \linespread { \l__rpg_panel_line_spread_tl } },
-            colback = \l__rpg_panel_color_tl,
-            colbacktitle = \l__rpg_panel_color_tl,
+            colback = \l__rpg_panel_background_tl,
+            colbacktitle = \l__rpg_panel_background_tl,
+            coltitle = \l__rpg_panel_accent_tl,
             fonttitle = \l__rpg_panel_title_font_tl,
             fontupper = \l__rpg_panel_body_font_tl,
             fontlower = \l__rpg_panel_body_font_tl,
         }
+
+        \bool_if:NTF \l__rpg_panel_floating_bool
+            { \tl_put_right:Nn \l__rpg_panel_box_keys_tl { float, } }
+            { \tl_put_right:Nn \l__rpg_panel_box_keys_tl { breakable, } }
 
         \bool_if:NT \l__rpg_panel_title_bool
         {
@@ -260,33 +293,16 @@
 %--------------------------------------------------------------------------------------
 %   GENERIC PANEL
 
-% Options are split between rpg/panel keys and raw tcolorbox keys. Supported panel keys:
-%   style=plain|comment|sidebar|narration, color=<color>, title=<text>,
-%   title-font=<commands>, body-font=<commands>, line-spread=<factor>.
+\NewDocumentCommand { \RPGPanelSet } { m }
+{
+    \keys_set:nn { rpg / panel / defaults } { #1 }
+}
+
+% Options are split between rpg/panel keys and raw tcolorbox keys. Supported panel keys
+% include accent=<color>, background=<color>, floating=<bool>, style=none|ribbon|bars,
+% title=<text>, title-font=<commands>, body-font=<commands>, and line-spread=<factor>.
 \NewDocumentEnvironment { RPGPanel } { O{} +b }
 {
     \__rpg_panel_render:nn {#1} {#2}
-}
-{ }
-
-
-%--------------------------------------------------------------------------------------
-%   SPECIAL CASES
-
-\NewDocumentEnvironment { RPGNarration } { O{} +b }
-{
-    \__rpg_panel_render:nn { style = narration, #1 } {#2}
-}
-{ }
-
-\NewDocumentEnvironment { RPGComment } { O{} m +b }
-{
-    \__rpg_panel_render:nn { style = comment, title = {#2}, #1 } {#3}
-}
-{ }
-
-\NewDocumentEnvironment { RPGSideBar } { O{} m +b }
-{
-    \__rpg_panel_render:nn { style = sidebar, title = {#2}, #1 } {#3}
 }
 { }

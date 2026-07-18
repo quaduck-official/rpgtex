@@ -192,70 +192,47 @@
     caption-style .value_required:n = true,
 
     %==========================================================================
-    % Comment boxes
+    % Panels
     %==========================================================================
 
-    % Comment title
-    comment-title-family .tl_set:N         = \l__rpg_comment_title_family_tl,
-    comment-title-family .initial:n        = \RPGFontFamilySans,
-    comment-title-family .value_required:n = true,
-    comment-title-color .tl_set:N         = \l__rpg_comment_title_color_tl,
-    comment-title-color .initial:n        =,
-    comment-title-color .value_required:n = true,
-    comment-title-style .tl_set:N         = \l__rpg_comment_title_style_tl,
-    comment-title-style .initial:n        = \RPGFontStyleTitle,
-    comment-title-style .value_required:n = true,
+    % Panel title
+    panel-title-family .tl_set:N         = \l__rpg_panel_title_family_tl,
+    panel-title-family .initial:n        = \RPGFontFamilySans,
+    panel-title-family .value_required:n = true,
+    panel-title-color .tl_set:N         = \l__rpg_panel_title_color_tl,
+    panel-title-color .initial:n        =,
+    panel-title-color .value_required:n = true,
+    panel-title-style .tl_set:N         = \l__rpg_panel_title_style_tl,
+    panel-title-style .initial:n        = \RPGFontStyleTitle,
+    panel-title-style .value_required:n = true,
 
-    % Comment body
-    comment-body-family .tl_set:N         = \l__rpg_comment_body_family_tl,
-    comment-body-family .initial:n        = \RPGFontFamilySans,
-    comment-body-family .value_required:n = true,
-    comment-body-color .tl_set:N         = \l__rpg_comment_body_color_tl,
-    comment-body-color .initial:n        =,
-    comment-body-color .value_required:n = true,
-    comment-body-style .tl_set:N         = \l__rpg_comment_body_style_tl,
-    comment-body-style .initial:n        = \RPGFontStyleBodySmall,
-    comment-body-style .value_required:n = true,
+    % Panel body
+    panel-body-family .tl_set:N         = \l__rpg_panel_body_family_tl,
+    panel-body-family .initial:n        = \RPGFontFamilySans,
+    panel-body-family .value_required:n = true,
+    panel-body-color .tl_set:N         = \l__rpg_panel_body_color_tl,
+    panel-body-color .initial:n        =,
+    panel-body-color .value_required:n = true,
+    panel-body-style .tl_set:N         = \l__rpg_panel_body_style_tl,
+    panel-body-style .initial:n        = \RPGFontStyleBodySmall,
+    panel-body-style .value_required:n = true,
 
-    %==========================================================================
-    % Sidebars
-    %==========================================================================
-
-    % Sidebar title
-    sidebar-title-family .tl_set:N         = \l__rpg_sidebar_title_family_tl,
-    sidebar-title-family .initial:n        = \RPGFontFamilySans,
-    sidebar-title-family .value_required:n = true,
-    sidebar-title-color .tl_set:N         = \l__rpg_sidebar_title_color_tl,
-    sidebar-title-color .initial:n        =,
-    sidebar-title-color .value_required:n = true,
-    sidebar-title-style .tl_set:N         = \l__rpg_sidebar_title_style_tl,
-    sidebar-title-style .initial:n        = \RPGFontStyleTitle,
-    sidebar-title-style .value_required:n = true,
-
-    % Sidebar body
-    sidebar-body-family .tl_set:N         = \l__rpg_sidebar_body_family_tl,
-    sidebar-body-family .initial:n        = \RPGFontFamilySans,
-    sidebar-body-family .value_required:n = true,
-    sidebar-body-color .tl_set:N         = \l__rpg_sidebar_body_color_tl,
-    sidebar-body-color .initial:n        =,
-    sidebar-body-color .value_required:n = true,
-    sidebar-body-style .tl_set:N         = \l__rpg_sidebar_body_style_tl,
-    sidebar-body-style .initial:n        = \RPGFontStyleBodySmall,
-    sidebar-body-style .value_required:n = true,
-
-    %==========================================================================
-    % Read-aloud boxes
-    %==========================================================================
-
-    readaloud-family .tl_set:N         = \l__rpg_readaloud_family_tl,
-    readaloud-family .initial:n        = \RPGFontFamilySans,
-    readaloud-family .value_required:n = true,
-    readaloud-color .tl_set:N         = \l__rpg_readaloud_color_tl,
-    readaloud-color .initial:n        =,
-    readaloud-color .value_required:n = true,
-    readaloud-style .tl_set:N         = \l__rpg_readaloud_style_tl,
-    readaloud-style .initial:n        = \RPGFontStyleBodySmall,
-    readaloud-style .value_required:n = true,
+    % Deprecated panel-container font keys.
+    comment-title-family .meta:n = { panel-title-family = #1 },
+    comment-title-color  .meta:n = { panel-title-color = #1 },
+    comment-title-style  .meta:n = { panel-title-style = #1 },
+    comment-body-family  .meta:n = { panel-body-family = #1 },
+    comment-body-color   .meta:n = { panel-body-color = #1 },
+    comment-body-style   .meta:n = { panel-body-style = #1 },
+    sidebar-title-family .meta:n = { panel-title-family = #1 },
+    sidebar-title-color  .meta:n = { panel-title-color = #1 },
+    sidebar-title-style  .meta:n = { panel-title-style = #1 },
+    sidebar-body-family  .meta:n = { panel-body-family = #1 },
+    sidebar-body-color   .meta:n = { panel-body-color = #1 },
+    sidebar-body-style   .meta:n = { panel-body-style = #1 },
+    readaloud-family     .meta:n = { panel-body-family = #1 },
+    readaloud-color      .meta:n = { panel-body-color = #1 },
+    readaloud-style      .meta:n = { panel-body-style = #1 },
 
     %==========================================================================
     % Table of Contents
@@ -511,34 +488,45 @@
     \l__rpg_caption_family_tl \l__rpg_caption_color_tl \l__rpg_caption_style_tl
 }
 
-% Comment boxes
+% Panels
+\NewDocumentCommand{\RPGFontPanelTitle}{}
+{
+    \l__rpg_panel_title_family_tl \l__rpg_panel_title_color_tl \l__rpg_panel_title_style_tl
+}
+
+\NewDocumentCommand{\RPGFontPanelBody}{}
+{
+    \l__rpg_panel_body_family_tl \l__rpg_panel_body_color_tl \l__rpg_panel_body_style_tl
+}
+
+% Deprecated panel-container font commands.
 \NewDocumentCommand{\RPGFontCommentTitle}{}
 {
-    \l__rpg_comment_title_family_tl \l__rpg_comment_title_color_tl \l__rpg_comment_title_style_tl
+    \RPGFontPanelTitle
 }
 
 
 \NewDocumentCommand{\RPGFontCommentBody}{}
 {
-    \l__rpg_comment_body_family_tl \l__rpg_comment_body_color_tl \l__rpg_comment_body_style_tl
+    \RPGFontPanelBody
 }
 
-% Sidebars
+
 \NewDocumentCommand{\RPGFontSidebarTitle}{}
 {
-    \l__rpg_sidebar_title_family_tl \l__rpg_sidebar_title_color_tl \l__rpg_sidebar_title_style_tl
+    \RPGFontPanelTitle
 }
 
 
 \NewDocumentCommand{\RPGFontSidebarBody}{}
 {
-    \l__rpg_sidebar_body_family_tl \l__rpg_sidebar_body_color_tl \l__rpg_sidebar_body_style_tl
+    \RPGFontPanelBody
 }
 
-% Read-aloud boxes
+
 \NewDocumentCommand{\RPGFontReadAloud}{}
 {
-    \l__rpg_readaloud_family_tl \l__rpg_readaloud_color_tl \l__rpg_readaloud_style_tl
+    \RPGFontPanelBody
 }
 
 % Table of Contents

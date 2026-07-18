@@ -6,20 +6,35 @@
 
 \begin{document}
 
-\begin{RPGPanel}[title={hello there}]
-    test
+\begin{RPGPanel}[title={Default Panel}]
+    A panel uses the theme's panel background and accent colors by default.
 \end{RPGPanel}
 
-\begin{RPGNarration}[title={hello there}]
-    test
-\end{RPGNarration}
+\begin{RPGPanel}[style=none, title={No Border}]
+    The \texttt{none} style keeps the shared panel spacing without adding a border.
+\end{RPGPanel}
 
-\begin{RPGComment}[title={hello there}]
-    test
-\end{RPGComment}
+\begin{RPGPanel}[style=ribbon, title={Ribbon Style}]
+    The \texttt{ribbon} style adds the horizontal ribbon border treatment.
+\end{RPGPanel}
 
-\begin{RPGSideBar}[title={hello there}]
-    test
-\end{RPGSideBar}
+\begin{RPGPanel}[style=bars, title={Bars Style}]
+    The \texttt{bars} style adds the vertical side bars and corner marks.
+\end{RPGPanel}
+
+\begin{RPGPanel}[
+    style=ribbon,
+    accent=RPGColorForest,
+    background=RPGColorOlive,
+    title={Local Colors}
+]
+    Panel colors can be overridden per instance.
+\end{RPGPanel}
+
+\RPGPanelSet{style=bars, accent=RPGColorAmethyst, background=RPGColorGold}
+
+\begin{RPGPanel}[title={Configured Defaults}]
+    \texttt{\string\RPGPanelSet} changes the defaults for later panels.
+\end{RPGPanel}
 
 \end{document}
