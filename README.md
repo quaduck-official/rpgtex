@@ -89,7 +89,7 @@ Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrim
 \usepackage{rpgfont}
 ```
 
-Defines a few font families and styles (`RPGFontFamilySerif`, `RPGFontStyleEmphasis`, etc) as well as semantic wrappers for different combinations of color, face, and style used for different RPG typesetting purposes (`RPGFontHeader`, `RPGFontTableBody`, etc). *Does not change or set any existing document fonts to these new values*.
+Defines a few font families and styles (`RPGFontFamilySerif`, `RPGFontStyleEmphasis`, etc) as well as semantic wrappers for different combinations of color, face, and style used for different RPG typesetting purposes (`RPGFontHeader`, `RPGFontSubheading`, `RPGFontTableBody`, etc). *Does not change or set any existing document fonts to these new values*.
 
 **RPG Dependencies**
  - `rpgcolor`
@@ -129,8 +129,8 @@ Sets page geometry, paragraph spacing, list spacing, and optional column mode. `
 ```
 
 ```latex
-\RPGChapter{Chapter Title}
-\RPGSection{Section Title}
+\RPGChapter{Chapter Title}[Optional chapter subtitle]
+\RPGSection{Section Title}[Optional section subtitle]
 \RPGSubsection[plain, numbering=none]{Subsection Title}
 ```
 
@@ -141,13 +141,13 @@ Provides explicit RPG-styled sectioning commands without redefining standard LaT
  - `rpgfont`
 
 **User API**:
- - `\RPGPart[<options>]{<title>}` creates an RPG-styled part heading.
- - `\RPGChapter[<options>]{<title>}` creates an RPG-styled chapter heading.
- - `\RPGSection[<options>]{<title>}` creates an RPG-styled section heading.
- - `\RPGSubsection[<options>]{<title>}` creates an RPG-styled subsection heading.
- - `\RPGSubsubsection[<options>]{<title>}` creates an RPG-styled subsubsection heading.
- - `\RPGParagraph[<options>]{<title>}` creates an RPG-styled run-in paragraph heading.
- - `\RPGSubparagraph[<options>]{<title>}` creates an RPG-styled run-in subparagraph heading.
+ - `\RPGPart[<options>]{<title>}[<subheading>]` creates an RPG-styled part heading.
+ - `\RPGChapter[<options>]{<title>}[<subheading>]` creates an RPG-styled chapter heading.
+ - `\RPGSection[<options>]{<title>}[<subheading>]` creates an RPG-styled section heading.
+ - `\RPGSubsection[<options>]{<title>}[<subheading>]` creates an RPG-styled subsection heading.
+ - `\RPGSubsubsection[<options>]{<title>}[<subheading>]` creates an RPG-styled subsubsection heading.
+ - `\RPGParagraph[<options>]{<title>}[<subheading>]` creates an RPG-styled run-in paragraph heading.
+ - `\RPGSubparagraph[<options>]{<title>}[<subheading>]` creates an RPG-styled run-in subparagraph heading.
  - `\RPGSectionSet{<level>={<options>}, ...}` sets document-wide defaults for one or more heading levels.
 
 **Options**:
@@ -158,6 +158,10 @@ Provides explicit RPG-styled sectioning commands without redefining standard LaT
  - `before-skip=<length>` or `before=<length>` controls vertical space before a heading.
  - `after-skip=<length>` or `after=<length>` controls vertical space after a heading.
  - `toc=<true|false>` controls whether the heading is added to the table of contents.
+
+**Subheadings**:
+ - The optional post-title subheading uses `\RPGFontSubheading`.
+ - Configure it with `\RPGFontSet{subheading-family=<commands>, subheading-color=<commands>, subheading-style=<commands>}`.
 
 **Default Styling**:
  - `\RPGSectionSet` uses nested per-level options: `part`, `chapter`, `section`, `subsection`, `subsubsection`, `paragraph`, and `subparagraph`.

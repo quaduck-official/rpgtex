@@ -133,6 +133,17 @@
     subparagraph-style .initial:n        = \RPGFontStyleEmphasis,
     subparagraph-style .value_required:n = true,
 
+    % subheading
+    subheading-family .tl_set:N         = \l__rpg_subheading_family_tl,
+    subheading-family .initial:n        = \RPGFontFamilySerif,
+    subheading-family .value_required:n = true,
+    subheading-color .tl_set:N         = \l__rpg_subheading_color_tl,
+    subheading-color .initial:n        =,
+    subheading-color .value_required:n = true,
+    subheading-style .tl_set:N         = \l__rpg_subheading_style_tl,
+    subheading-style .initial:n        = \itshape,
+    subheading-style .value_required:n = true,
+
     %--------------------------------------------------------------------------
     % Tables
 
@@ -468,6 +479,12 @@
 \NewDocumentCommand{\RPGFontSubparagraph}{}
 {
     \l__rpg_subparagraph_family_tl \l__rpg_subparagraph_color_tl \l__rpg_subparagraph_style_tl
+}
+
+
+\NewDocumentCommand{\RPGFontSubheading}{}
+{
+    \l__rpg_subheading_family_tl \l__rpg_subheading_color_tl \l__rpg_subheading_style_tl
 }
 
 % Tables
