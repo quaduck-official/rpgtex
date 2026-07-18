@@ -75,7 +75,6 @@
 %---------------------------------------------------------------------------------------
 %   INCLUDE
 
-\RequirePackage{titlesec}
 \RequirePackage{geometry}
 \RequirePackage{enumitem}
 \RequirePackage{xcolor}
@@ -130,122 +129,6 @@
 % Customize itemize environment.
 \setlist{leftmargin=1em}
 \setitemize{noitemsep,topsep=0.5ex,label=\footnotesize{\textbullet}}
-
-
-
-%---------------------------------------------------------------------------------------
-%   LABELS
-    
-% Change part numbering to Arabic numbers from Roman numerals
-\renewcommand{\thepart}{\arabic{part}}
-
-% Remove Numbering (If you want Numbering set secnumdepth to the appropriate depth)
-\setcounter{secnumdepth}{0}
-
-
-
-%---------------------------------------------------------------------------------------
-%   SECTIONING
-
-
-%------     PART    ------ %
-
-\titleformat{\part}
-    [display]
-    { \centering \RPGFontPart } % format
-    { \RPGFontContour{\partname\ \thepart} } % label
-    { 2ex } % sep
-    { \RPGFontContour } % before-code
-
-
-%------     CHAPTER    ------ %
-
-\titleformat{\chapter}
-    { \RPGFontChapter } % format
-    { \RPGFontContour{\chaptertitlename\ \thechapter :} } % label
-    { \wordsep } % sep
-    { \RPGFontContour } % before-code
-
-\titlespacing*{\chapter}
-    { 0pt }  % left
-    { .3ex }  % before-sep
-    { 2.8ex } % after-sep
-
-
-%------     SECTION    ------ %
-
-\titleformat{\section}
-    { \RPGFontSection \RPGLayoutJustification } % format
-    { \thesection } % label
-    { 1em } % sep
-    { \nopagebreak } % before-code
-
-\titlespacing*{\section}
-    { 0pt } % left
-    { 1.3ex plus .43ex minus .43ex } % before-sep
-    { 0pt } % after-sep
-
-
-%------     SUBSECTION    ------ %
-
-\titleformat{\subsection}
-    { \RPGFontSubsection \RPGLayoutJustification } % format
-    { \thesubsection } % label
-    { 1em } % sep
-    { \nopagebreak } % before-code
-    [ \vspace{-.3ex} \titleline{ \color{RPGColorTitle} \titlerule[1pt] } ] % after-code
-
-\titlespacing*{\subsection}
-    { 0pt } % left
-    { 1.4ex plus .47ex minus .47ex } % before-sep
-    { 1.2ex } % after-sep
-
-
-%------     SUBSUBSECTION    ------ %
-
-\titleformat{\subsubsection}
-    { \RPGFontSubsubsection \RPGLayoutJustification } % format
-    { \thesubsubsection } % label
-    { 1em } % sep
-    { \nopagebreak } % before-code
-
-\titlespacing*{\subsubsection}
-    { 0pt } % left
-    { 2ex plus .67ex minus .67ex } % before-sep
-    { .2ex } % after-sep
-
-
-%------     PARAGRAPH    ------ %
-
-\titleformat{\paragraph}
-    [runin]
-    { \RPGFontParagraph } % format
-    { \theparagraph \quad } % label
-    {0pt} % sep
-    {}    % before-code
-    [.]   % after-code
-
-\titlespacing*{\paragraph}
-    {0pt}      % left
-    {\parskip} % before-sep
-    {\wordsep} % after-sep
-
-
-%------     SUBPARAGRAPH    ------ %
-
-\titleformat{\subparagraph}
-    [runin]
-    { \RPGFontSubparagraph } % format
-    { \thesubparagraph \quad } % label
-    {0pt} % sep
-    {}    % before-code
-    [.]   % after-code
-
-\titlespacing*{\subparagraph}
-    {\parindent} % left
-    {\parskip}   % before-sep
-    {\wordsep}   % after-sep
-
 
 
 

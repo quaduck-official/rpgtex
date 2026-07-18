@@ -1,30 +1,26 @@
 \documentclass{book}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RPGLAYOUT PACKAGE
+% RPGSECTION PACKAGE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{lipsum}
-
-% Load the package. Without options, rpglayout uses ragged-right, one-column layout.
 \usepackage[alignment=justified,columns=two]{rpglayout}
-
-% You can also use shortcut options:
-% \usepackage[raggedright,twocolumn]{rpglayout}
+\usepackage{rpgsection}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\chapter{Layout Example}
+\RPGChapter[ruled,numbering=Arabic]{Sectioning Example}
 
-\section{Exploration}
+\RPGSection[ruled]{Exploration}
 
-The old road winds through the forest until it reaches a ruined watchtower.
-The layout package sets page geometry, paragraph spacing, list spacing, and
-optional column mode. \lipsum[1]
+The section package provides explicit RPG heading commands without redefining
+standard \LaTeX{} commands such as \verb|\chapter| or \verb|\section|.
+\lipsum[1]
 
-\subsection{Travel Notes}
+\RPGSubsection[ruled]{Travel Notes}
 
 \begin{itemize}
     \item The trail is narrow and overgrown.
@@ -32,9 +28,11 @@ optional column mode. \lipsum[1]
     \item A cold wind blows from the tower entrance.
 \end{itemize}
 
-\section{Encounter}
+\RPGSection[numbering=arabic]{Encounter}
 
-Use \texttt{alignment=justified} for justified text and headings, or
-\texttt{columns=one} for a single-column page. \lipsum[2]
+Use heading keys for local styling changes, or \verb|\RPGSectionSet| to change
+package defaults. \lipsum[2]
+
+\RPGParagraph[ruled]{Treasure} A brass key rests under a loose flagstone.
 
 \end{document}
