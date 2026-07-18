@@ -8,19 +8,26 @@
 \usepackage[alignment=justified,columns=two]{rpglayout}
 \usepackage{rpgsection}
 
+\RPGSectionSet{
+    chapter = { numbering = Arabic },
+    section = { style = ruled },
+    subsection = { style = ruled, numbering = arabic },
+    paragraph = { numbering = arabic },
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\RPGChapter[ruled,numbering=Arabic]{Sectioning Example}
+\RPGChapter{Sectioning Example}
 
-\RPGSection[ruled]{Exploration}
+\RPGSection{Exploration}
 
 The section package provides explicit RPG heading commands without redefining
 standard \LaTeX{} commands such as \verb|\chapter| or \verb|\section|.
 \lipsum[1]
 
-\RPGSubsection[ruled]{Travel Notes}
+\RPGSubsection{Travel Notes}
 
 \begin{itemize}
     \item The trail is narrow and overgrown.
@@ -28,11 +35,11 @@ standard \LaTeX{} commands such as \verb|\chapter| or \verb|\section|.
     \item A cold wind blows from the tower entrance.
 \end{itemize}
 
-\RPGSection[numbering=arabic]{Encounter}
+\RPGSection[style=plain,numbering=arabic]{Encounter}
 
 Use heading keys for local styling changes, or \verb|\RPGSectionSet| to change
 package defaults. \lipsum[2]
 
-\RPGParagraph[ruled]{Treasure} A brass key rests under a loose flagstone.
+\RPGParagraph{Treasure} A brass key rests under a loose flagstone.
 
 \end{document}
