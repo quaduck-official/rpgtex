@@ -20,6 +20,49 @@
 \tl_set:Nn \l__rpg_layout_justification_tl { \RaggedRight }
 \bool_new:N \l__rpg_layout_twocolumn_bool
 
+\tl_new:N \l__rpg_layout_section_level_tl
+\prop_new:N \g__rpg_layout_section_spacing_prop
+
+
+
+%---------------------------------------------------------------------------------------
+%   DEFAULTS
+
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { part / before }
+    { .8ex plus .25ex minus .2ex }
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { part / after }
+    { 2ex }
+
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { chapter / before }
+    { .6ex plus .2ex minus .15ex }
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { chapter / after }
+    { 2.8ex }
+
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { section / before }
+    { 2ex plus .6ex minus .45ex }
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { section / after }
+    { 0pt }
+
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { subsection / before }
+    { 1.6ex plus .5ex minus .35ex }
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { subsection / after }
+    { 1.2ex }
+
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { subsubsection / before }
+    { 1.2ex plus .4ex minus .3ex }
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { subsubsection / after }
+    { .2ex }
+
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { paragraph / before }
+    { \dimexpr\parskip + .4ex\relax }
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { paragraph / after }
+    { .333em }
+
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { subparagraph / before }
+    { \parskip }
+\prop_gput:Nnn \g__rpg_layout_section_spacing_prop { subparagraph / after }
+    { .333em }
+
 
 \keys_define:nn { rpg / layout / options }
 {
@@ -63,6 +106,57 @@
         { \bool_set_true:N \l__rpg_layout_twocolumn_bool },
 }
 \ProcessKeysOptions { rpg / layout / options }
+
+
+\cs_generate_variant:Nn \prop_gput:Nnn { Nxn }
+
+\cs_new_protected:Npn \__rpg_layout_section_spacing_put:nn #1#2
+{
+    \prop_gput:Nxn \g__rpg_layout_section_spacing_prop
+        { \l__rpg_layout_section_level_tl / #1 }
+        { #2 }
+}
+
+\cs_new_protected:Npn \__rpg_layout_section_spacing_set_level:nn #1#2
+{
+    \tl_set:Nn \l__rpg_layout_section_level_tl { #1 }
+    \keys_set:nn { rpg / layout / section-spacing / level } { #2 }
+}
+
+\keys_define:nn { rpg / layout / section-spacing / level }
+{
+    before-skip .code:n =
+        { \__rpg_layout_section_spacing_put:nn { before } { #1 } },
+    before-skip .value_required:n = true,
+    before .code:n =
+        { \__rpg_layout_section_spacing_put:nn { before } { #1 } },
+    before .value_required:n = true,
+
+    after-skip .code:n =
+        { \__rpg_layout_section_spacing_put:nn { after } { #1 } },
+    after-skip .value_required:n = true,
+    after .code:n =
+        { \__rpg_layout_section_spacing_put:nn { after } { #1 } },
+    after .value_required:n = true,
+}
+
+\keys_define:nn { rpg / layout / setup }
+{
+    part .code:n =
+        { \__rpg_layout_section_spacing_set_level:nn { part } { #1 } },
+    chapter .code:n =
+        { \__rpg_layout_section_spacing_set_level:nn { chapter } { #1 } },
+    section .code:n =
+        { \__rpg_layout_section_spacing_set_level:nn { section } { #1 } },
+    subsection .code:n =
+        { \__rpg_layout_section_spacing_set_level:nn { subsection } { #1 } },
+    subsubsection .code:n =
+        { \__rpg_layout_section_spacing_set_level:nn { subsubsection } { #1 } },
+    paragraph .code:n =
+        { \__rpg_layout_section_spacing_set_level:nn { paragraph } { #1 } },
+    subparagraph .code:n =
+        { \__rpg_layout_section_spacing_set_level:nn { subparagraph } { #1 } },
+}
 
 \AtBeginDocument
 {
@@ -138,3 +232,15 @@
 \NewDocumentCommand{\RPGLayoutJustification}
     {}
     {\l__rpg_layout_justification_tl}
+
+\NewDocumentCommand{\RPGLayoutSectionBeforeSkip}
+    {m}
+    {\prop_item:Nn \g__rpg_layout_section_spacing_prop { #1 / before }}
+
+\NewDocumentCommand{\RPGLayoutSectionAfterSkip}
+    {m}
+    {\prop_item:Nn \g__rpg_layout_section_spacing_prop { #1 / after }}
+
+\NewDocumentCommand{\RPGLayoutSet}
+    {m}
+    {\keys_set:nn { rpg / layout / setup } { #1 }}
