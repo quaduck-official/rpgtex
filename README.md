@@ -32,6 +32,7 @@ The bundle accepts explicit key/value options only. Shortcut options such as `tw
 | `rpgcolor` | Color schemes and themes |
 | `rpgfont`  | Font families, colors, and styles |
 | `rpglayout`  | Page layout and geometry |
+| `rpgpage`  | Page-level styling and background drawing |
 | `rpgsection` | Explicit RPG-styled sectioning commands |
 | `rpgtable`  | Tables with headers and alternating colors |
 | `rpgskilltree` | Overlaid skill progression graphs |
@@ -107,13 +108,36 @@ Defines a few font families and styles (`RPGFontFamilySerif`, `RPGFontStyleEmpha
     alignment=<ragged|raggedright|justified>,
     columns=<one|two>
 ]{rpglayout}
+
+\RPGLayoutSet{
+    section = { before = <length>, after = <length> },
+    subsection = { before-skip = <length>, after-skip = <length> },
+}
 ```
 
-Sets page geometry, paragraph spacing, list spacing, and optional column mode. `justification` is also accepted as an alias for `alignment`, and `column` as an alias for `columns`. Shortcut options are also available: `ragged`, `raggedright`, `justified`, `onecolumn`, and `twocolumn`.
+Sets page geometry, paragraph spacing, list spacing, default heading spacing, and optional column mode. `justification` is also accepted as an alias for `alignment`, and `column` as an alias for `columns`. Shortcut options are also available: `ragged`, `raggedright`, `justified`, `onecolumn`, and `twocolumn`.
 
 **RPG Dependencies**
  - `rpgcolor`
  - `rpgfont`
+
+**User API**:
+ - `\RPGLayoutSet{<level>={<options>}, ...}` sets layout-owned defaults for heading spacing consumed by `rpgsection`.
+ - Supported levels are `part`, `chapter`, `section`, `subsection`, `subsubsection`, `paragraph`, and `subparagraph`.
+ - `before-skip=<length>` or `before=<length>` controls default vertical space before headings at that level.
+ - `after-skip=<length>` or `after=<length>` controls default vertical space after headings at that level.
+
+
+### `rpgpage`
+
+```latex
+\usepackage{rpgpage}
+```
+
+Applies page-level document styling. Currently this draws `RPGColorBackground` across every page by default, so the active `rpgcolor` theme controls the page background when `rpgpage` is loaded directly or through the `rpg` bundle.
+
+**RPG Dependencies**
+ - `rpgcolor`
 
 
 ### `rpgsection`
@@ -122,7 +146,7 @@ Sets page geometry, paragraph spacing, list spacing, and optional column mode. `
 \usepackage{rpgsection}
 
 \RPGSectionSet{
-    chapter = { style = ruled, numbering = Arabic },
+    chapter = { style = ruled, numbering = Arabic, contour = true },
     section = { style = banner },
     subsection = { style = ruled, numbering = arabic },
 }
@@ -136,9 +160,12 @@ Sets page geometry, paragraph spacing, list spacing, and optional column mode. `
 
 Provides explicit RPG-styled sectioning commands without redefining standard LaTeX commands such as `\chapter` or `\section`. This keeps package use opt-in: documents can mix ordinary LaTeX sectioning with RPG-styled headings, while future RPG document classes can decide whether to map the standard commands onto these variants.
 
+RPG sectioning commands are defined only when the current document class provides the corresponding sectioning counter. For example, `\RPGChapter` is available in `book` and `report`, but not in `article`.
+
 **RPG Dependencies**
  - `rpgcolor`
  - `rpgfont`
+ - `rpglayout`
 
 **User API**:
  - `\RPGPart[<options>]{<title>}[<subheading>]` creates an RPG-styled part heading.
@@ -155,8 +182,9 @@ Provides explicit RPG-styled sectioning commands without redefining standard LaT
  - `numbering=<none|arabic|Arabic|roman|Roman|alph|Alph>` controls whether and how the heading counter is stepped and printed. The default is `none`.
  - `font=<commands>` overrides the font commands for a heading.
  - `label=<commands>` overrides the printed label used when numbering is enabled.
- - `before-skip=<length>` or `before=<length>` controls vertical space before a heading.
- - `after-skip=<length>` or `after=<length>` controls vertical space after a heading.
+ - `contour=<true|false>` controls whether plain and ruled display headings are drawn with `\RPGFontContour`. The default is `false`.
+ - `before-skip=<length>` or `before=<length>` overrides layout-owned vertical space before this heading or heading level.
+ - `after-skip=<length>` or `after=<length>` overrides layout-owned vertical space after this heading or heading level.
  - `toc=<true|false>` controls whether the heading is added to the table of contents.
 
 **Subheadings**:
@@ -173,7 +201,6 @@ Provides explicit RPG-styled sectioning commands without redefining standard LaT
 
 ```latex
 \usepackage[
-    color=<colorname>
     header-row=<true|false>
     striped=<odd|even|none>
     title=<title>
@@ -194,7 +221,7 @@ Provides explicit RPG-styled sectioning commands without redefining standard LaT
 \end{RPGTable}
 ```
 
-Provides a `tabularx` wrapper that alternates row color. Inherits default row color from the theme set by `rpgcolor`; other options can be given document-wide defaults, but each option can (and probably should, in the case of e.g. `title`) be supplied on a per-table basis. When loaded as part of the `rpg` package, no `rpgtable` options are exposed at the package level, meaning only the `rpgcolor` color theme API and per-table options are available.
+Provides a `tabularx` wrapper that alternates row color. The default row color always comes from the active `rpgcolor` semantic color `RPGColorTableRow`; use `\RPGColorSet{table-row=<color>}` or a named theme to change the default. Per-table `color=<colorname>` remains available for one-off overrides. Non-color options can be given document-wide defaults, but each option can also be supplied on a per-table basis.
 
 **RPG Dependencies**
  - `rpgcolor`
@@ -202,6 +229,36 @@ Provides a `tabularx` wrapper that alternates row color. Inherits default row co
 
 **User API**:
  - `RPGTable` environment with associated options.
+
+### `rpgpanel`
+
+```latex
+\usepackage[
+    floating=<true|false>,
+    style=<none|ribbon|bars>
+]{rpgpanel}
+```
+
+```latex
+\begin{RPGPanel}[
+    title=<title>,
+    background=<colorname>,
+    accent=<colorname>,
+    style=<none|ribbon|bars>
+]
+    % ...
+\end{RPGPanel}
+```
+
+Provides styled `tcolorbox` panels. Default panel colors always come from the active `rpgcolor` semantic colors: `RPGColorPanelBackground` and `RPGColorPanelAccent`. Use `\RPGColorSet{panel-background=<color>, panel-accent=<color>}` or a named theme to change panel defaults. Per-panel `background`, `color`, and `accent` options remain available for one-off overrides only. Panel font settings in `rpgfont` control family and style, not panel colors.
+
+**RPG Dependencies**
+ - `rpgcolor`
+ - `rpgfont`
+
+**User API**:
+ - `\RPGPanelSet{floating=<true|false>, style=<none|ribbon|bars>}` sets document-wide panel behavior defaults, not color defaults.
+ - `RPGPanel` environment accepts panel options plus raw `tcolorbox` keys.
 
 ### `rpgskilltree`
 

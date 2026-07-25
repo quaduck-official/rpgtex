@@ -2,8 +2,6 @@
 
 \usepackage{rpgpanel}
 
-\RPGColorThemeApply{PHB2014}
-
 \begin{document}
 
 \begin{RPGPanel}[title={Default Panel}]
@@ -31,10 +29,10 @@
     Panel colors can be overridden per instance.
 \end{RPGPanel}
 
-\RPGPanelSet{style=bars, accent=RPGColorAmethyst, background=RPGColorGold}
+\RPGColorSet{panel-accent=RPGColorAmethyst, panel-background=RPGColorGold}
 
 \begin{RPGPanel}[title={Configured Defaults}]
-    \texttt{\string\RPGPanelSet} changes the defaults for later panels.
+    \texttt{\string\RPGColorSet} changes the defaults for later panels.
 \end{RPGPanel}
 
 \end{document}

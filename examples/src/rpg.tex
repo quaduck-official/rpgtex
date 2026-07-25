@@ -12,19 +12,77 @@
     columns=two,
 ]{rpg}
 
+% All commands below come from the single bundle package above.
+\definecolor{MoonlitGold}{HTML}{E4C46A}
+\RPGColorThemeCreate{moonlit-ruins}{%
+    background       = RPGColorFrost,
+    accent           = MoonlitGold,
+    body             = RPGColorInk,
+    muted            = RPGColorStorm,
+    header           = RPGColorMidnight,
+    footer           = RPGColorMidnight,
+    panel-background = RPGColorMist,
+    panel-accent     = RPGColorMidnight,
+    table-row        = RPGColorMist,
+    contour          = RPGColorAsh,
+}
+
+\RPGFontSet[
+    subheading-color=\color{RPGColorMuted},
+    term-color=\color{RPGColorHeader},
+    dice-color=\color{RPGColorAccent},
+]
+
+\RPGSectionSet{
+    chapter = { style = ruled, numbering = Arabic, contour = true },
+    section = { style = banner },
+    subsection = { style = ruled, numbering = arabic, contour = true },
+    subsubsection = { style = plain, numbering = alph },
+    paragraph = { numbering = arabic },
+}
+
+\RPGPanelSet{style=ribbon}
+\RPGSkillTreeStyle{vertex={draw=RPGColorHeader}, edge={draw=RPGColorHeader}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\chapter{RPG Bundle Example}
+\RPGChapter{RPG Bundle Example}[One package loading the full toolkit]
 
-\section{The Old Road}
+The \texttt{rpg} bundle loads the color, font, layout, sectioning, table,
+skill-tree, and panel modules together.  This document uses only
+\texttt{\string\usepackage\{rpg\}} and then exercises the bundled APIs.
 
-The road follows a cold river through pine woods.  The \texttt{rpg} package loads the color, font, and layout modules together.  This example uses the maritime color theme, ragged-right body text, RPG heading styles, and a two-column page layout.
+\RPGSection{Bundle Options}[Theme, alignment, and columns]
+
+The package options selected the \texttt{arcane} color theme, ragged-right body
+text, RPG body fonts, tightened list spacing, and a two-column page layout.
+The visible text styles here come from semantic wrappers such as
+{\RPGFontTerm term text}, {\RPGFontDice 2d6+3}, and
+{\RPGFontCode \string\RPGFontCode}.  The same semantic colors feed the panels,
+tables, and headings below.
 
 \lipsum[1]
 
-\section{Panels}
+\RPGSection{Section Commands}[Explicit RPG-styled headings]
+
+\RPGSubsection{Travel Notes}[Numbered ruled subsection]
+
+\begin{itemize}
+    \item Blue lanterns mark the path to a ruined watchtower.
+    \item The stones are carved with warnings in an older tongue.
+\end{itemize}
+
+\RPGSubsubsection{Local Heading Override}[Plain alphabetical subsubsection]
+
+\RPGSection[plain,numbering=Roman,contour=true]{Local Options}[Per-heading style changes]
+
+\RPGParagraph{Treasure}[Run-in paragraph] A brass key rests under a loose
+flagstone.  \RPGSubparagraph{Complication}[Run-in subparagraph] Lifting the
+stone releases a cold blue spark unless the key is taken with iron tongs.
+
+\RPGSection{Panels}[Global defaults and local overrides]
 
 \begin{RPGPanel}[title={Read-Aloud Text}, style=bars]
     Read or paraphrase this when the party reaches the tower: pale witchlight
@@ -49,24 +107,74 @@ The road follows a cold river through pine woods.  The \texttt{rpg} package load
     Individual panels can override the theme's panel accent and background.
 \end{RPGPanel}
 
-\RPGPanelSet{style=bars, accent=RPGColorHex}
+\RPGPanelSet{style=bars}
+\RPGColorSet{panel-accent=RPGColorHex}
 
-\begin{RPGPanel}[title={Panel Defaults}]
-    \texttt{\string\RPGPanelSet} changes the defaults for later panels.
+\begin{RPGPanel}[title={Panel Defaults}, line-spread=1.02]
+    \texttt{\string\RPGPanelSet} changes the defaults for later panels, while
+    local keys such as \texttt{line-spread} still apply to a single panel.
 \end{RPGPanel}
 
-\subsection{Travel Notes}
+\RPGSection{Tables}[Theme-aware tabularx wrappers]
 
-\begin{itemize}
-    \item Blue lanterns mark the path to a ruined watchtower.
-    \item The stones are carved with warnings in an older tongue.
-\end{itemize}
+\begin{RPGTable}[title={Exploration Checks}]{l c X}
+    Task & DC & Result \\
+    Decode the lantern sigils & 12 & Learn which doors are trapped. \\
+    Climb the slick tower wall & 15 & Reach the second-floor arrow slit. \\
+    Calm the moon-mad raven & 13 & Gain a guide to the hidden stair. \\
+    Force the rusted postern & 17 & Enter loudly and alert the sentries.
+\end{RPGTable}
 
-\section{At the Tower}
+\begin{RPGTable}[title={Unstriped Supplies}, header-row=false, striped=none, color=RPGColorOlive]{l X}
+    Crowbar & Grants advantage on the postern check. \\
+    Silver chalk & Reveals invisible bridge-runes for one minute. \\
+    Witchlight vial & Sheds blue light but attracts tower moths.
+\end{RPGTable}
 
-The bundle interface intentionally uses key/value options. Shortcut options such
-as \texttt{twocolumn} are available on \texttt{rpglayout}, but not on
-\texttt{rpg}.
+\RPGSection{Skill Trees}[Progression graphs over ordinary content]
+
+\begin{RPGSkillTree}
+    \RPGSkillTreeStyle{vertex={draw=RPGColorHeader, fill=RPGColorBackground}, edge={draw=RPGColorHeader, thick}}
+
+    \begin{RPGTable}[title={Moonlit Sentinel Path}]{c c l X}
+        && Talent & Benefit \\
+        \RPGSTVertex{watch} && Night Watch & Ignore dim-light penalties to Perception. \\
+        & \RPGSTVertex{signal} & Signal Lantern & Mark an ally; they may reroll one failed save. \\
+        \RPGSTVertex{ward} && Silver Ward & Gain resistance to necrotic damage for one round. \\
+        & \RPGSTVertex[$\star$]{aegis} & Moon Aegis & Extend Silver Ward to each marked ally.
+    \end{RPGTable}
+
+    \RPGSkillTreeEdges{%
+        \RPGSTEdge{watch}{signal}
+        \RPGSTEdge{watch}{ward}
+        \RPGSTEdge[out=0,in=180]{signal.east}{aegis.west}
+        \RPGSTEdge[bend right=14]{ward}{aegis}
+    }
+\end{RPGSkillTree}
+
+\RPGSection{Live Theme Changes}[Color APIs after package load]
+
+\RPGColorThemeApply{moonlit-ruins}
+
+Applying a document-local theme updates the semantic colors used by later
+headings, panels, and tables.
+
+\begin{RPGPanel}[title={Moonlit Theme Panel}]
+    This panel is rendered after \texttt{\string\RPGColorThemeApply}.  It uses
+    the same panel commands as before, but the live semantic colors are now from
+    the custom theme.
+\end{RPGPanel}
+
+\RPGColorSet{panel-accent=RPGColorDeepTeal, table-row=RPGColorSeafoam}
+
+\begin{RPGTable}[title={Local Color Override}, width=.9\columnwidth]{l X}
+    Override & \texttt{\string\RPGColorSet} changes only selected semantic colors. \\
+    Effect & This table picks up the new row color without creating another theme.
+\end{RPGTable}
+
+The bundle interface intentionally uses key/value package options. Shortcut
+options such as \texttt{twocolumn} remain available on \texttt{rpglayout}, but
+not on \texttt{rpg}; use \texttt{columns=two} when loading the bundle.
 
 \lipsum[2]
 
