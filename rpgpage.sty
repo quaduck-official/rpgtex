@@ -1,0 +1,32 @@
+%=======================================================================================
+%   RPGPAGE
+%=======================================================================================
+
+\ProvidesExplPackage
+    {rpgpage}
+    {2026-07-18}
+    {0.1}
+    {Page-level styling for RPG typesetting.}
+
+\RequirePackage{xcolor}
+\RequirePackage{eso-pic}
+
+\RequirePackage{rpgcolor}
+
+
+
+%=======================================================================================
+%   CONTROL SEQUENCES
+
+\cs_new_protected:Npn \__rpg_page_draw_background:
+{
+    \AtPageLowerLeft
+    {
+        \group_begin:
+            \color { RPGColorBackground }
+            \rule { \paperwidth } { \paperheight }
+        \group_end:
+    }
+}
+
+\AddToShipoutPictureBG { \__rpg_page_draw_background: }
