@@ -591,3 +591,24 @@
         \__rpg_section_runin:nnnn { subparagraph } { #1 } { #2 } { #3 }
     }
 }
+
+
+\NewDocumentCommand { \RPGTerm } { m }
+{
+    { \RPGFontTerm #1 }
+}
+
+
+\NewDocumentCommand { \RPGDefinition } { O{} m }
+{
+    {
+        \IfValueTF { #1 }
+        {
+            \label{rpgdef:#1}
+        }
+        {
+            \label{rpgdef:#2}
+        }
+        \RPGFontDefinition #2
+    }
+}
