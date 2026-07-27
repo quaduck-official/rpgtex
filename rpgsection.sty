@@ -496,6 +496,7 @@
         \__rpg_section_toc_add:nn { #1 } { #3 }
         \str_if_eq:nnTF { #1 } { chapter }
         {
+            \clearpage
             \__rpg_section_if_twocolumn:TF
                 { \__rpg_section_topnewpage:n { \__rpg_section_display_block:n { #4 } } }
                 { \__rpg_section_display_block:n { #4 } }
