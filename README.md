@@ -50,6 +50,24 @@ and `openright` to `book`. It also maps standard sectioning commands such as
 Use the explicit `\RPGChapter`, `\RPGSection`, etc. commands when you need
 per-heading RPG options such as `style`, `numbering`, `contour`, or `toc`.
 
+Use `rpgarticle` for RPG article-length documents. It is the article-class
+counterpart of `rpgbook`: it loads `article`, forwards class options such as
+`10pt`, `11pt`, `12pt`, `oneside`, and `twoside` to the underlying class, and
+maps `\section`, `\subsection`, and `\paragraph` to RPG-styled headings.
+
+```latex
+\documentclass[
+    11pt,
+    colortheme=arcane,
+    alignment=raggedright,
+    columns=two
+]{rpgarticle}
+```
+
+Because `article` has no `\chapter`, `rpgarticle` does not map it. Sectioning
+levels that exist in the class (`\section` through `\subparagraph`) are
+mapped to their `\RPG...` counterparts.
+
 
 ## Individual Packages
 
