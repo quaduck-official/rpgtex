@@ -8,6 +8,9 @@
     {0.5.0}
     {Overlay digraphs on other environments for skill progression}
 
+
+
+
 %======================================================================================
 %   SETUP
 
@@ -57,6 +60,10 @@
 
 
 
+
+%======================================================================================
+%   IMPLEMENTATION
+
 %--------------------------------------------------------------------------------------
 %   OPTIONS
 
@@ -74,8 +81,9 @@
 
 
 %--------------------------------------------------------------------------------------
-%   CONTROL SEQUENCES
+%   RESET AND STYLE STATE
 
+% Each tree gets a fresh node-name prefix so repeated vertex ids do not collide.
 \cs_new_protected:Npn \__rpg_skill_tree_reset:
 {
     \int_gincr:N \g__rpg_skill_tree_index_int
@@ -89,6 +97,7 @@
     }
 }
 
+
 \cs_new_protected:Npn \__rpg_skill_tree_reset_styles:
 {
     \tikzset
@@ -98,6 +107,9 @@
     }
 }
 
+
+% Style commands outside a tree update the defaults; inside a tree they affect only
+% that tree's active styles.
 \cs_new_protected:Npn \__rpg_skill_tree_style_vertex:n #1
 {
     \int_compare:nNnTF { \g__rpg_skill_tree_depth_int } > { 0 }
@@ -108,6 +120,7 @@
         \tikzset { rpgst/default~vertex/.append~style = {#1} }
     }
 }
+
 
 \cs_new_protected:Npn \__rpg_skill_tree_style_edge:n #1
 {
@@ -121,6 +134,9 @@
 }
 
 
+
+%--------------------------------------------------------------------------------------
+%   VERTICES AND EDGES
 \cs_new_protected:Npn \__rpg_skill_tree_vertex:nn #1#2
 {
     \use:x
@@ -131,6 +147,7 @@
         { \exp_not:n {#1} }
     }
 }
+
 
 \cs_new_protected:Npn \__rpg_skill_tree_edge:nnn #1#2#3
 {
@@ -150,13 +167,21 @@
 %======================================================================================
 %   API
 
-% Apply TikZ option fragments to this skill tree only.
+%--------------------------------------------------------------------------------------
+%   STYLES
+
+% Apply TikZ option fragments to skill-tree vertices or edges.
 % Usage:
 %   \RPGSkillTreeStyle{vertex={draw=red}, edge={thick, draw=red}}
 \NewDocumentCommand{\RPGSkillTreeStyle}{m}
 {%
     \keys_set:nn { rpg / skill tree / style } {#1}%
 }
+
+
+
+%--------------------------------------------------------------------------------------
+%   VERTICES
 
 % Mark a vertex.
 % Usage:
@@ -167,6 +192,11 @@
     \__rpg_skill_tree_vertex:nn {#1} {#2}%
 }
 
+
+
+%--------------------------------------------------------------------------------------
+%   EDGES
+
 % Store edge commands, but execute them only after the environment closes.
 % Multiple calls append to the current tree.
 % Usage:
@@ -175,6 +205,7 @@
 {%
     \tl_gput_right:Nn \g__rpg_skill_tree_edges_tl {#1}%
 }
+
 
 % Draw an edge between two named vertices. Anchor suffixes are allowed:
 %   \RPGSTEdge{a.east}{b.west}
@@ -186,6 +217,7 @@
     \__rpg_skill_tree_edge:nnn {#1} {#2} {#3}%
 }
 
+
 % Reference the automatically-prefixed TikZ node name in custom paths.
 % Usage inside \RPGSkillTreeEdges:
 %   \RPGSTDraw{\draw[rpgst/edge] (\RPGSTRef{a}.east) -| (\RPGSTRef{b}.north);}
@@ -194,13 +226,20 @@
     \tl_use:N \g__rpg_skill_tree_prefix_tl #1%
 }
 
+
 % Raw TikZ escape hatch for custom routing.
 \NewDocumentCommand{\RPGSTDraw}{+m}
 {%
     #1%
 }
 
-% Environment:
+
+
+%--------------------------------------------------------------------------------------
+%   ENVIRONMENT
+
+% The body lays out marked nodes in normal document flow; edges are drawn afterward in
+% a remembered overlay so they can connect nodes across boxes or environments.
 \NewDocumentEnvironment{RPGSkillTree}{}
 {%
     \__rpg_skill_tree_reset:%
