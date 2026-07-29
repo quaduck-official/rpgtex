@@ -56,13 +56,9 @@
 
 \RPGSectionSet
 {
-    part = { numbering = Roman },
-    chapter = { style = ruled, numbering = Arabic, contour = true },
-    section = { style = banner, numbering = arabic },
-    subsection = { style = ruled, numbering = arabic, contour = true },
-    subsubsection = { numbering = arabic },
-    paragraph = { numbering = arabic },
-    subparagraph = { numbering = arabic },
+    chapter = { style = ruled, contour = true },
+    section = { style = banner },
+    subsection = { style = ruled, contour = true },
 }
 
 \cs_new_protected:Npn \__rpgbook_section_call:Nnnnn #1#2#3#4#5

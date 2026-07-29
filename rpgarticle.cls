@@ -56,11 +56,8 @@
 
 \RPGSectionSet
 {
-    section = { style = banner, numbering = arabic },
-    subsection = { style = ruled, numbering = arabic, contour = true },
-    subsubsection = { numbering = arabic },
-    paragraph = { numbering = arabic },
-    subparagraph = { numbering = arabic },
+    section = { style = banner },
+    subsection = { style = ruled, contour = true },
 }
 
 \cs_new_protected:Npn \__rpgarticle_section_call:Nnnnn #1#2#3#4#5
