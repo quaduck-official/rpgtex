@@ -671,16 +671,22 @@
 }
 
 
+\cs_new:Npn \__rpg_definition_label:nn #1#2
+{
+    rpgdef-\tl_if_blank:nTF { #1 } { #2 } { #1 }
+}
+
+
 \NewDocumentCommand { \RPGDefinition } { O{} m }
 {
     {
-        \IfValueTF { #1 }
-        {
-            \label{rpgdef:#1}
-        }
-        {
-            \label{rpgdef:#2}
-        }
+        \label { \__rpg_definition_label:nn { #1 } { #2 } }
         \RPGFontDefinition #2
     }
+}
+
+
+\NewDocumentCommand { \RPGReference } { O{} m }
+{
+    { \RPGFontTerm #2~(p.~\pageref { \__rpg_definition_label:nn { #1 } { #2 } }) }
 }
