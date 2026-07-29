@@ -65,6 +65,12 @@
 \definecolor  {RPGColorMallardWhite} {HTML} {EEE9D8}
 \definecolor {RPGColorMallardYellow} {HTML} {D5A72E}
 
+\definecolor        {RPGColorOSRInk} {HTML} {211D19}
+\definecolor       {RPGColorOSRGray} {HTML} {5E5A52}
+\definecolor        {RPGColorOSRAsh} {HTML} {B8B0A2}
+\definecolor        {RPGColorOSRRed} {HTML} {8E1F16}
+\definecolor  {RPGColorOSRParchment} {HTML} {E7D8B7}
+
 
 %=============================================================================
 % Named-theme system
@@ -233,6 +239,20 @@
     panel-accent     = RPGColorNightshade,
     table-row        = RPGColorBone,
     contour          = RPGColorAsh,
+}
+
+\RPGColorThemeCreate {OSR}
+{
+    background       = RPGColorOSRParchment,
+    accent           = RPGColorOSRRed,
+    body             = RPGColorOSRInk,
+    muted            = RPGColorOSRGray,
+    header           = RPGColorOSRInk,
+    footer           = RPGColorOSRInk,
+    panel-background = RPGColorOSRAsh,
+    panel-accent     = RPGColorOSRRed,
+    table-row        = RPGColorOSRAsh,
+    contour          = RPGColorOSRGray,
 }
 
 \RPGColorThemeCreate {infernal}

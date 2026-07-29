@@ -123,6 +123,7 @@ Provides a large number of custom color names (`RPGColorCharcoal`, `RPGColorCrim
  - *feywild*: Olive panels with forest headers and brass accents.
  - *maritime*: Mist panels with midnight headers and deep teal accents.
  - *gothic*: Bone panels with nightshade headers and blood-red accents.
+ - *OSR*: Hand-inked greyscale on parchment with restrained red accents.
  - *infernal*: Mauve panels with blood-red headers and rust accents.
  - *underdark*: Moonstone panels with ink headers and nightshade accents.
  - *druidic*: Olive panels with forest headers and umber accents.
