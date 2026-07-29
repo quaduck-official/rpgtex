@@ -4,7 +4,11 @@ DIR_LIB = ..
 DIR_PDF = pdf
 
 SRC = $(wildcard $(DIR_SRC)/*.tex)
-LIB = $(wildcard $(DIR_LIB)/*.tex) $(wildcard $(DIR_LIB)/*.sty)
+LIB = $(wildcard $(DIR_LIB)/*.tex) \
+      $(wildcard $(DIR_LIB)/*.sty) \
+      $(wildcard $(DIR_LIB)/*.cls) \
+      $(wildcard $(DIR_LIB)/*.clo) \
+      $(wildcard $(DIR_LIB)/src/*.sty)
 PDF = $(SRC:$(DIR_SRC)/%.tex=$(DIR_PDF)/%.pdf)
 
 
@@ -17,7 +21,10 @@ clean :
 	rm -rf $(DIR_PDF) $(DIR_BLD)
 
 
-$(DIR_PDF)/%.pdf : $(DIR_SRC)/%.tex $(DIR_LIB)/%.sty | $(DIR_PDF) $(DIR_BLD)/%
+.SECONDARY: $(SRC:$(DIR_SRC)/%.tex=$(DIR_BLD)/%)
+
+
+$(DIR_PDF)/%.pdf : $(DIR_SRC)/%.tex $(LIB) | $(DIR_PDF) $(DIR_BLD)/%
 	TEXINPUTS=.:$(abspath $(DIR_LIB))//: \
 		  pdflatex -output-directory=$(abspath $(DIR_BLD))/$* $< \
 		  && mv $(DIR_BLD)/$*/$*.pdf $(DIR_PDF)/

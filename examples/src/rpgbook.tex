@@ -1,0 +1,71 @@
+\documentclass[
+    11pt,
+    colortheme=arcane,
+    alignment=raggedright,
+    columns=two,
+]{rpgbook}
+
+\usepackage{lipsum}
+
+\begin{document}
+
+\tableofcontents
+
+\chapter[Class Example]{The Obsidian Gate}[Standard commands with RPG styling]
+
+The \texttt{rpgbook} class loads the RPG toolkit, applies book-oriented RPG
+defaults, and maps ordinary sectioning commands onto RPG heading styles. This
+chapter was created with \texttt{\string\chapter}, not
+\texttt{\string\RPGChapter}.
+
+\section[Command Mapping]{Mapped Section Commands}[Short titles still work]
+
+The standard short-title form is preserved for table-of-contents entries:
+
+\begin{verbatim}
+\section[Command Mapping]
+    {Mapped Section Commands}
+    [Short titles still work]
+\end{verbatim}
+
+The final optional argument is an \texttt{rpgbook} extension that supplies the
+RPG subheading text.
+
+\subsection[Short TOC Title]{A Longer Subsection Title}[With a subheading]
+
+\lipsum[1]
+
+\section*{Unnumbered Section}
+
+Starred headings render with RPG styling but are not numbered or added to the
+table of contents.
+
+\section{Panels and Tables}
+
+\begin{RPGPanel}[title={Class-loaded Panel}]
+    Non-sectioning RPG commands and environments are available directly because
+    the class loads the same modules as the \texttt{rpg} package bundle.
+\end{RPGPanel}
+
+\begin{RPGTable}[title={Gate Signs}]{l X}
+    Sign & Meaning \\
+    Violet sparks & The gate is listening for a spoken passphrase. \\
+    Black frost & A creature crossed from the far side within the last hour. \\
+    Silent bells & Magic is suppressed until the next moonrise.
+\end{RPGTable}
+
+\paragraph{Run-in Heading} This paragraph heading also uses the standard command.
+It keeps the RPG run-in treatment while accepting the familiar LaTeX command
+name.
+
+\section{Explicit RPG Commands}
+
+Use explicit RPG commands when a single heading needs local RPG options instead
+of the class defaults.
+
+\RPGSubsection[plain, numbering=Roman, contour=true]{Local RPG Override}
+
+This heading intentionally uses \texttt{\string\RPGSubsection} so it can provide
+RPG-specific options directly.
+
+\end{document}
