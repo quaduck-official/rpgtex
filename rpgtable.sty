@@ -8,6 +8,9 @@
     {0.5.0}
     {Simple tabularx wrapper for RPG-style tables}
 
+
+
+
 %======================================================================================
 %   SETUP
 
@@ -59,17 +62,19 @@
 
 
 %--------------------------------------------------------------------------------------
-%   CONTROL SEQUENCES
+%   PATCH STATE
 
+% Original array/tabularx hooks are saved while group-local header patches are active.
 \cs_new_eq:NN \__rpg_table_saved_ar_align:       \scan_stop:
 \cs_new_eq:NN \__rpg_table_saved_insert_column:  \scan_stop:
 \cs_new_eq:NN \__rpg_table_saved_insert_pcolumn: \scan_stop:
 \cs_new_eq:NN \__rpg_table_saved_next_row:       \scan_stop:
 
 
-% -----------------------------------------------------------------------------
-% Messages
-% -----------------------------------------------------------------------------
+
+%--------------------------------------------------------------------------------------
+%   MESSAGES
+
 \msg_new:nnn{rpgtable}{no-header-row-hook}
 {
     Could~not~find~the~array~row~advance~hook.~
@@ -83,7 +88,7 @@
 %   OPTIONS
 
 %--------------------------------------------------------------------------------------
-%   GLOBAL DEFAULT
+%   GLOBAL DEFAULTS
 
 \keys_define:nn {rpg / table / defaults}
 {
@@ -136,9 +141,15 @@
     header-row .default:n = true,
 }
 
-% -----------------------------------------------------------------------------
-% Defaults
-% -----------------------------------------------------------------------------
+
+
+
+%======================================================================================
+%   IMPLEMENTATION
+
+%--------------------------------------------------------------------------------------
+%   DEFAULTS
+
 \cs_new_protected:Npn \__rpg_table_set_defaults:
 {
     \tl_set:Nn \l__rpg_table_color_tl { RPGColorTableRow }
@@ -154,17 +165,21 @@
         \g__rpg_table_default_header_row_bool
 }
 
-% -----------------------------------------------------------------------------
-% Special columns
-% -----------------------------------------------------------------------------
+
+
+%--------------------------------------------------------------------------------------
+%   COLUMNS
+
 % Centered flexible-width tabularx column.
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 
-% -----------------------------------------------------------------------------
-% Header-row styling
-% -----------------------------------------------------------------------------
-% Locally inserts \RPGFontTableHeader into ordinary cells while the current
-% table row index is zero.
+
+
+%--------------------------------------------------------------------------------------
+%   HEADER ROW
+
+% The header font is injected through array internals so callers do not need to wrap
+% every first-row cell manually.
 \cs_new_protected:Npn \__rpg_table_header_cell_font:
 {
     \int_compare:nNnT { \g__rpg_table_row_index_int } = { 0 }
@@ -172,6 +187,7 @@
         \RPGFontTableHeader
     }
 }
+
 
 \cs_new_protected:Npn \__rpg_table_patch_header_row:
 {
@@ -223,9 +239,10 @@
     }
 }
 
-% -----------------------------------------------------------------------------
-% Renderer
-% -----------------------------------------------------------------------------
+
+
+%--------------------------------------------------------------------------------------
+%   ROW COLORS
 
 \cs_new_protected:Npn \__rpg_table_apply_row_colors:
 {
@@ -257,6 +274,10 @@
     }
 }
 
+
+
+%--------------------------------------------------------------------------------------
+%   RENDERER
 
 \cs_new_protected:Npn \__rpg_table_render:nnn #1#2#3
 {
@@ -299,17 +320,26 @@
     \group_end:
 }
 
-% -----------------------------------------------------------------------------
-% Public backend for downstream wrappers
-% -----------------------------------------------------------------------------
+
+
+
+%======================================================================================
+%   API
+
+%--------------------------------------------------------------------------------------
+%   RENDER COMMAND
+
+% Public backend for downstream wrappers.
 \NewDocumentCommand{\RPGTableRender}{O{} m +m}
 {
     \__rpg_table_render:nnn {#1} {#2} {#3}
 }
 
-% -----------------------------------------------------------------------------
-% Body-collecting environment
-% -----------------------------------------------------------------------------
+
+
+%--------------------------------------------------------------------------------------
+%   ENVIRONMENT
+
 \NewDocumentEnvironment{RPGTable}{O{} m +b}
 {
     \__rpg_table_render:nnn {#1} {#2} {#3}
