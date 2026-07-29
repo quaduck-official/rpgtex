@@ -56,9 +56,9 @@
 
 \RPGSectionSet
 {
-    chapter = { style = ruled, contour = true },
+    chapter = { style = ruled },
     section = { style = banner },
-    subsection = { style = ruled, contour = true },
+    subsection = { style = ruled },
 }
 
 \cs_new_protected:Npn \__rpgbook_section_call:Nnnnn #1#2#3#4#5
