@@ -24,6 +24,32 @@ The bundle accepts explicit key/value options only. Shortcut options such as `tw
 
 ### `documentclass`
 
+Use `rpgbook` when the whole document should use RPG defaults and ordinary
+sectioning commands should render as RPG-styled headings.
+
+```latex
+\documentclass[
+    11pt,
+    colortheme=<themename>,
+    alignment=<ragged|raggedright|justified>,
+    columns=<one|two>
+]{rpgbook}
+```
+
+Unlike `\usepackage{rpg}`, the class loads `book` itself and forwards ordinary
+class options such as `10pt`, `11pt`, `12pt`, `oneside`, `twoside`, `openany`,
+and `openright` to `book`. It also maps standard sectioning commands such as
+`\chapter`, `\section`, and `\paragraph` to the corresponding RPG commands.
+
+```latex
+\chapter[Short TOC Title]{Chapter Title}[Optional chapter subtitle]
+\section{Section Title}
+\section*{Unnumbered Section}
+```
+
+Use the explicit `\RPGChapter`, `\RPGSection`, etc. commands when you need
+per-heading RPG options such as `style`, `numbering`, `contour`, or `toc`.
+
 
 ## Individual Packages
 
