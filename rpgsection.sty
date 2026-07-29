@@ -8,6 +8,12 @@
     {0.1}
     {Explicit RPG sectioning commands.}
 
+%=======================================================================================
+%   SETUP
+
+%---------------------------------------------------------------------------------------
+%   REQUIRE
+
 \RequirePackage{rpgcolor}
 \RequirePackage{rpgfont}
 \RequirePackage{rpglayout}
@@ -15,7 +21,7 @@
 
 
 %=======================================================================================
-%   SETUP
+%   DATA
 
 %---------------------------------------------------------------------------------------
 %   VARIABLES
@@ -49,6 +55,8 @@
 %---------------------------------------------------------------------------------------
 %   DEFAULTS
 
+% Defaults are stored by sectioning level so \RPGSectionSet can update one level
+% without touching the others.
 \prop_gput:Nnn \g__rpg_section_defaults_prop { part / font }
     { \centering \RPGFontPart }
 \prop_gput:Nnn \g__rpg_section_defaults_prop { part / label }
@@ -125,6 +133,11 @@
 %=======================================================================================
 %   OPTIONS
 
+%---------------------------------------------------------------------------------------
+%   DEFAULT OPTION HELPERS
+
+% The active level is held separately while parsing nested default keys such as
+% section={style=ruled, numbering=arabic}.
 \cs_generate_variant:Nn \prop_gput:Nnn { Nxn }
 
 \cs_new_protected:Npn \__rpg_section_default_put:nn #1#2
@@ -139,6 +152,10 @@
     \tl_set:Nn \l__rpg_section_default_level_tl { #1 }
     \keys_set:nn { rpg / section / defaults / level } { #2 }
 }
+
+
+%---------------------------------------------------------------------------------------
+%   DEFAULT LEVEL KEYS
 
 \keys_define:nn { rpg / section / defaults / level }
 {
@@ -202,6 +219,10 @@
     contour .default:n = true,
 }
 
+
+%---------------------------------------------------------------------------------------
+%   PER-HEADING KEYS
+
 \keys_define:nn { rpg / section / style }
 {
     font .tl_set:N         = \l__rpg_section_font_tl,
@@ -259,6 +280,10 @@
     toc .bool_set:N = \l__rpg_section_toc_bool,
 }
 
+
+%---------------------------------------------------------------------------------------
+%   DEFAULT DISPATCH KEYS
+
 \keys_define:nn { rpg / section / defaults }
 {
     part .code:n =
@@ -280,7 +305,10 @@
 
 
 %=======================================================================================
-%   INTERNALS
+%   IMPLEMENTATION
+
+%---------------------------------------------------------------------------------------
+%   LAYOUT HELPERS
 
 \cs_new:Npn \__rpg_section_justification:
 {
@@ -313,6 +341,10 @@
     \use:c { @topnewpage } [ #1 ]
 }
 
+
+%---------------------------------------------------------------------------------------
+%   DEFAULT APPLICATION
+
 \cs_new_protected:Npn \__rpg_section_defaults_apply:n #1
 {
     \prop_get:NnN \g__rpg_section_defaults_prop { #1 / font } \l__rpg_section_font_tl
@@ -331,6 +363,10 @@
         { \bool_set_false:N \l__rpg_section_contour_bool }
     \bool_set_true:N \l__rpg_section_toc_bool
 }
+
+
+%---------------------------------------------------------------------------------------
+%   TITLE RENDERING
 
 \cs_new_protected:Npn \__rpg_section_style_apply:
 {
@@ -448,6 +484,10 @@
     }
 }
 
+
+%---------------------------------------------------------------------------------------
+%   COUNTERS AND TOC
+
 \cs_new_protected:Npn \__rpg_section_counter_step:n #1
 {
     \cs_if_exist:cTF { c@#1 }
@@ -471,11 +511,16 @@
             \addcontentsline { toc } { #1 } { #2 }
         }
         {
+            % Match the printed numbering style instead of relying on class defaults.
             \addcontentsline { toc } { #1 }
                 { \protect\numberline { \__rpg_section_number: } #2 }
         }
     }
 }
+
+
+%---------------------------------------------------------------------------------------
+%   DISPLAY BACKENDS
 
 \cs_new_protected:Npn \__rpg_section_display_block:n #1
 {
@@ -503,6 +548,7 @@
         \__rpg_section_toc_add:nn { #1 } { \l__rpg_section_toc_title_tl }
         \str_if_eq:nnTF { #1 } { chapter }
         {
+            % Mirror LaTeX's chapter behavior while preserving two-column placement.
             \clearpage
             \__rpg_section_if_twocolumn:TF
                 { \__rpg_section_topnewpage:n { \__rpg_section_display_block:n { #4 } } }
@@ -540,13 +586,21 @@
 
 
 %=======================================================================================
-%   COMMANDS
+%   API
+
+%---------------------------------------------------------------------------------------
+%   CONFIGURATION
 
 \NewDocumentCommand { \RPGSectionSet } { m }
 {
     \keys_set:nn { rpg / section / defaults } { #1 }
 }
 
+
+%---------------------------------------------------------------------------------------
+%   BLOCK SECTION COMMANDS
+
+% Commands are defined only for counters supplied by the current document class.
 \cs_if_exist:cT { c@part }
 {
     \NewDocumentCommand { \RPGPart } { O{} m o }
@@ -587,6 +641,10 @@
     }
 }
 
+
+%---------------------------------------------------------------------------------------
+%   RUN-IN SECTION COMMANDS
+
 \cs_if_exist:cT { c@paragraph }
 {
     \NewDocumentCommand { \RPGParagraph } { O{} m o }
@@ -603,6 +661,9 @@
     }
 }
 
+
+%---------------------------------------------------------------------------------------
+%   INLINE TEXT
 
 \NewDocumentCommand { \RPGTerm } { m }
 {
