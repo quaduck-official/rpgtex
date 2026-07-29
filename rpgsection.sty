@@ -27,6 +27,7 @@
 \tl_new:N \l__rpg_section_heading_style_tl
 \tl_new:N \l__rpg_section_level_tl
 \tl_new:N \l__rpg_section_title_tl
+\tl_new:N \l__rpg_section_toc_title_tl
 \tl_new:N \l__rpg_section_subheading_tl
 \tl_new:N \l__rpg_section_default_level_tl
 \tl_new:N \l__rpg_section_numbering_tl
@@ -208,6 +209,9 @@
 
     label .tl_set:N         = \l__rpg_section_label_tl,
     label .value_required:n = true,
+
+    toc-title .tl_set:N         = \l__rpg_section_toc_title_tl,
+    toc-title .value_required:n = true,
 
     before-skip .tl_set:N         = \l__rpg_section_before_tl,
     before-skip .value_required:n = true,
@@ -490,10 +494,13 @@
 {
     \group_begin:
         \__rpg_section_defaults_apply:n { #1 }
+        \tl_clear:N \l__rpg_section_toc_title_tl
         \keys_set:nn { rpg / section / style } { #2 }
         \tl_set:Nn \l__rpg_section_title_tl { #3 }
         \__rpg_section_counter_step:n { #1 }
-        \__rpg_section_toc_add:nn { #1 } { #3 }
+        \tl_if_blank:VT \l__rpg_section_toc_title_tl
+            { \tl_set_eq:NN \l__rpg_section_toc_title_tl \l__rpg_section_title_tl }
+        \__rpg_section_toc_add:nn { #1 } { \l__rpg_section_toc_title_tl }
         \str_if_eq:nnTF { #1 } { chapter }
         {
             \clearpage
@@ -510,10 +517,13 @@
 {
     \group_begin:
         \__rpg_section_defaults_apply:n { #1 }
+        \tl_clear:N \l__rpg_section_toc_title_tl
         \keys_set:nn { rpg / section / style } { #2 }
         \tl_set:Nn \l__rpg_section_title_tl { #3 }
         \__rpg_section_counter_step:n { #1 }
-        \__rpg_section_toc_add:nn { #1 } { #3 }
+        \tl_if_blank:VT \l__rpg_section_toc_title_tl
+            { \tl_set_eq:NN \l__rpg_section_toc_title_tl \l__rpg_section_title_tl }
+        \__rpg_section_toc_add:nn { #1 } { \l__rpg_section_toc_title_tl }
         \par \addvspace { \l__rpg_section_before_tl }
         \noindent
         \__rpg_section_runin_indent:n { #1 }
