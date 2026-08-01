@@ -336,20 +336,30 @@
     definition-family .tl_set:N         = \l__rpg_definition_family_tl,
     definition-family .value_required:n = true,
     definition-color .tl_set:N         = \l__rpg_definition_color_tl,
-    definition-color .initial:n        = \color{RPGColorDefinition},
+    definition-color .initial:n        = \color{RPGColorBody},
     definition-color .value_required:n = true,
     definition-style .tl_set:N         = \l__rpg_definition_style_tl,
-    definition-style .initial:n        = \RPGFontStyleEmphasis,
+    definition-style .initial:n        = \bfseries,
     definition-style .value_required:n = true,
+
+    % Reference
+    reference-family .tl_set:N         = \l__rpg_reference_family_tl,
+    reference-family .value_required:n = true,
+    reference-color .tl_set:N         = \l__rpg_reference_color_tl,
+    reference-color .initial:n        = \color{RPGColorBody},
+    reference-color .value_required:n = true,
+    reference-style .tl_set:N         = \l__rpg_reference_style_tl,
+    reference-style .initial:n        = \em,
+    reference-style .value_required:n = true,
 
     % Term
     term-family .tl_set:N         = \l__rpg_term_family_tl,
     term-family .value_required:n = true,
     term-color .tl_set:N         = \l__rpg_term_color_tl,
-    term-color .initial:n        = \color{RPGColorTerm},
+    term-color .initial:n        = \color{RPGColorBody},
     term-color .value_required:n = true,
     term-style .tl_set:N         = \l__rpg_term_style_tl,
-    term-style .initial:n        = \RPGFontStyleEmphasis,
+    term-style .initial:n        = \em,
     term-style .value_required:n = true,
 
     % Code
@@ -540,6 +550,12 @@
 \NewDocumentCommand{\RPGFontDefinition}{}
 {
     \l__rpg_definition_family_tl \l__rpg_definition_color_tl \l__rpg_definition_style_tl
+}
+
+
+\NewDocumentCommand{\RPGFontReference}{}
+{
+    \l__rpg_reference_family_tl \l__rpg_reference_color_tl \l__rpg_reference_style_tl
 }
 
 
